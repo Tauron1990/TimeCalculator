@@ -32,11 +32,15 @@ namespace TimeCalculator.Migrations
 
                     b.Property<long>("Iterations");
 
+                    b.Property<int>("Length");
+
                     b.Property<TimeSpan>("NormaizedTime");
 
                     b.Property<bool>("Problem");
 
                     b.Property<DateTime>("StartTime");
+
+                    b.Property<int>("Width");
 
                     b.HasKey("Id");
 

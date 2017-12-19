@@ -30,5 +30,7 @@ namespace TimeCalculator
         {
             e.Cancel = true;
         }
+
+        private void TimeSpanEdit_OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((MainWindowViewModel) DataContext).RunTime = (TimeSpan) e.NewValue;
     }
 }

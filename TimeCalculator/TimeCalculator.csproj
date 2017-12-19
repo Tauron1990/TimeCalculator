@@ -87,6 +87,7 @@
     <Reference Include="Microsoft.Extensions.Primitives, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0-alpha-004\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
@@ -109,7 +110,6 @@
     <Reference Include="Syncfusion.SfSkinManager.Wpf, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="Syncfusion.Shared.Wpf, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="Syncfusion.Shared.WPF.resources, Version=15.4460.0.17, Culture=en-US, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
-    <Reference Include="Syncfusion.Themes.Metro.Wpf, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="Syncfusion.Tools.Wpf, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -160,6 +160,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="DataDics\BusyIndicator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataDics\Editors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataDics\MS control.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -168,6 +180,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BL\CalculationInput.cs" />
+    <Compile Include="BL\CalculationOutput.cs" />
+    <Compile Include="BL\ISimpleRule.cs" />
+    <Compile Include="BL\BuissinesRules.cs" />
+    <Compile Include="BL\Rules\CalculationRule.cs" />
+    <Compile Include="Converter\BoolToBrushConverter.cs" />
     <Compile Include="Data\JobDatabase.cs" />
     <Compile Include="Data\JobEntity.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -177,13 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="Migrations\20171218190208_Initial.cs" />
-    <Compile Include="Migrations\20171218190208_Initial.designer.cs">
-      <DependentUpon>20171218190208_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20171219041014_V1.cs" />
-    <Compile Include="Migrations\20171219041014_V1.designer.cs">
-      <DependentUpon>20171219041014_V1.cs</DependentUpon>
+    <Compile Include="Migrations\20171219184938_Initial.cs" />
+    <Compile Include="Migrations\20171219184938_Initial.designer.cs">
+      <DependentUpon>20171219184938_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\JobDatabaseModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

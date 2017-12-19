@@ -16,6 +16,10 @@ namespace TimeCalculator.Data
 
         public long Amount { get; set; }
 
+        public int Length { get; set; }
+
+        public int Width { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public TimeSpan NormaizedTime { get; set; }

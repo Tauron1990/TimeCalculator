@@ -5,61 +5,42 @@ using System.ComponentModel;
 using System.Linq;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
+using TimeCalculator.BL;
 
 namespace TimeCalculator
 {
-    public sealed class MainWindowViewModel : ViewModelBase, INotifyDataErrorInfo
+    public sealed class MainWindowViewModel : ViewModelBase
     {
-        private readonly Dictionary<string, string> _errorValues = new Dictionary<string, string>();
-
-        public IEnumerable GetErrors(string propertyName) => !_errorValues.TryGetValue(propertyName, out var list) ? null : list;
-
-        public bool HasErrors { get { return _errorValues.All(l => l.Value == null); } }
-
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-
-        private void AddError(string name, string value)
-        {
-            if (!_errorValues.ContainsKey(name))
-                _errorValues[name] = null;
-
-            if(_errorValues[name] == value) return;
-
-            _errorValues[name] = value;
-
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(name));
-
-            RaisePropertyChanged(nameof(HasErrors));
-        }
-
         public MainWindowViewModel()
         {
+            PropertyChanged += OnPropertyChanged;
             Reset();
+            SetReult();
         }
-
+        
         [Command]
         public void Reset()
         {
             Amount = null;
             Iterations = null;
             StartDateTime = DateTime.Now;
-            RunTime = null;
+            RunTime = TimeSpan.Zero;
+            Problems = false;
+            BigProblems = false;
         }
 
         public long? Amount
         {
             get => GetProperty(() => Amount);
-            set => SetProperty(() => Amount, value, () => ValidateLong(nameof(Amount), value));
+            set => SetProperty(() => Amount, value);
         }
 
         public long? Iterations
         {
             get => GetProperty(() => Iterations);
-            set => SetProperty(() => Iterations, value, () => ValidateLong(nameof(Iterations), value));
+            set => SetProperty(() => Iterations, value);
         }
-
-        private void ValidateLong(string name, long? value) => AddError(name, value > 0 ? null : "Wert muss mindestens 1 sein.");
-
+        
         public bool Problems
         {
             get => GetProperty(() => Problems);
@@ -81,22 +62,65 @@ namespace TimeCalculator
             });
         }
 
+        public string FormatValue
+        {
+            get => GetProperty(() => FormatValue);
+            set => SetProperty(() => FormatValue, value);
+        }
+
         public DateTime StartDateTime
         {
             get => GetProperty(() => StartDateTime);
             set => SetProperty(() => StartDateTime, value);
         }
 
-        public TimeSpan? RunTime
+        public TimeSpan RunTime
         {
             get => GetProperty(() => RunTime);
-            set => SetProperty(() => RunTime, value, () =>
+            set => SetProperty(() => RunTime, value);
+        }
+
+        public string Result
+        {
+            get => GetProperty(() => Result);
+            set => SetProperty(() => Result, value);
+        }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            switch (propertyChangedEventArgs.PropertyName)
             {
-                if (value > TimeSpan.FromSeconds(1))
-                    AddError(nameof(RunTime), "Mindesten eine Sekunde Laufzeit.");
-                else
-                    AddError(nameof(RunTime), null);
-            });
+                case nameof(RunTime):
+                case nameof(Amount):
+                case nameof(Iterations):
+                    SetReult();
+                    break;
+            }
+        }
+
+        private void SetReult()
+        {
+            var cresult = BuissinesRules.CalculationRule.Action(new CalculationInput(Amount, Iterations, RunTime));
+
+            Result = cresult.FormatedResult;
+
+            _insertOk = cresult.NormalizedTime != null;
+        }
+
+        private bool _insertOk;
+
+        public string Status
+        {
+            get => GetProperty(() => Status);
+            set => SetProperty(() => Status, value);
+        }
+
+        public bool StatusOk { get; set; }
+
+        [Command]
+        public void Save()
+        {
+
         }
     }
 }

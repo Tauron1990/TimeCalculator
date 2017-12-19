@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Syncfusion.Windows.Shared;
 
 namespace TimeCalculator
 {
@@ -13,5 +14,8 @@ namespace TimeCalculator
     /// </summary>
     public partial class App : Application
     {
+        private void App_OnStartup(object sender, StartupEventArgs e)
+        {
+        }
     }
 }
