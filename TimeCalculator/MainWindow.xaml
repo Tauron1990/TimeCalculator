@@ -1,12 +1,63 @@
-﻿<Window x:Class="TimeCalculator.MainWindow"
+﻿<sync:ChromelessWindow x:Class="TimeCalculator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TimeCalculator"
+        xmlns:sync="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
-</Window>
+        Title="Time Colculator" Height="350" Width="650" Icon="if_time machine_49027.ico">
+    <sync:ChromelessWindow.DataContext>
+        <local:MainWindowViewModel/>
+    </sync:ChromelessWindow.DataContext>
+    <sync:TabControlExt OnCloseButtonClick="TabControlExt_OnOnCloseButtonClick" OnCloseAllTabs="TabControlExt_OnOnCloseButtonClick" OnCloseOtherTabs="TabControlExt_OnOnCloseButtonClick">
+        <sync:TabItemExt Header="Einfügen">
+            <StackPanel>
+                <GroupBox Header="Auflage" Padding="3" Margin="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="5"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Auflage:" Margin="2"/>
+                        <sync:IntegerTextBox Text="{DXBinding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Auflage" WatermarkTextIsVisible="True" 
+                                             UseNullOption="True" Margin="2" MinValue="1" Grid.Column="1" Grid.Row="0"/>
+                        <TextBlock Text="Durchläufe:" Margin="7 ,2" Grid.Column="2" Grid.Row="0"/>
+                        <sync:IntegerTextBox Text="{DXBinding Iterations, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Durchläufe" WatermarkTextIsVisible="True"
+                                             UseNullOption="True" Margin="2" MinValue="1" Grid.Column="3" Grid.Row="0"/>
+                        <TextBlock Text="Probleme ?" Margin="2" Grid.Column="0" Grid.Row="2"/>
+                        <CheckBox Content="Etwas" Grid.Column="1" Grid.Row="2" Margin="2" IsChecked="{Binding Problems}"/>
+                        <CheckBox Content="Sehr" Grid.Column="3" Grid.Row="2" Margin="2" IsChecked="{Binding BigProblems}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Zeiten" Padding="3" Margin="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="5"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Startzeit:" Margin="2, 10" TextAlignment="Center"/>
+                        <sync:SfDatePicker Value="{Binding StartDateTime}" Grid.Column="1" Grid.Row="0" Margin="2" HorizontalAlignment="Center"/>
+                        <TextBlock Text="Zeit:" Grid.Column="2" Grid.Row="0" Margin="2, 10"/>
+                        <sync:TimeSpanEdit Grid.Column="3" Grid.Row="0" Margin="2" Format="hhh:mm" MinValue="0:1"/>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </sync:TabItemExt>
+    </sync:TabControlExt>
+</sync:ChromelessWindow>
