@@ -9,7 +9,7 @@ namespace TimeCalculator.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "JopEntities",
+                name: "JobEntities",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -21,19 +21,20 @@ namespace TimeCalculator.Migrations
                     Length = table.Column<int>(nullable: false),
                     NormaizedTime = table.Column<TimeSpan>(nullable: false),
                     Problem = table.Column<bool>(nullable: false),
+                    Speed = table.Column<double>(nullable: false),
                     StartTime = table.Column<DateTime>(nullable: false),
                     Width = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_JopEntities", x => x.Id);
+                    table.PrimaryKey("PK_JobEntities", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "JopEntities");
+                name: "JobEntities");
         }
     }
 }

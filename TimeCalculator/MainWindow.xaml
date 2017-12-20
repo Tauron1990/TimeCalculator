@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:TimeCalculator"
         xmlns:conv="clr-namespace:TimeCalculator.Converter"
         xmlns:sync="http://schemas.syncfusion.com/wpf"
+        xmlns:bl="clr-namespace:TimeCalculator.BL"
         mc:Ignorable="d"
-        Title="Time Colculator" Height="350" Width="650" Icon="if_time machine_49027.ico">
+        Title="Time Colculator" Height="370" Width="450" Icon="if_time machine_49027.ico">
     <sync:ChromelessWindow.DataContext>
         <local:MainWindowViewModel/>
     </sync:ChromelessWindow.DataContext>
@@ -21,67 +22,74 @@
             </conv:BoolToBrushConverter.TrueBrush>
         </conv:BoolToBrushConverter>
     </sync:ChromelessWindow.Resources>
-    <sync:TabControlExt OnCloseButtonClick="TabControlExt_OnOnCloseButtonClick" OnCloseAllTabs="TabControlExt_OnOnCloseButtonClick" OnCloseOtherTabs="TabControlExt_OnOnCloseButtonClick">
-        <sync:TabItemExt Header="Einfügen">
-            <StackPanel>
-                <GroupBox Header="Auflage" Padding="3" Margin="5">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="5"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="5"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Auflage:" Margin="2"/>
-                        <sync:IntegerTextBox Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Auflage" WatermarkTextIsVisible="True" 
-                                             UseNullOption="True" Margin="2" Grid.Column="1" Grid.Row="0"/>
-                        <TextBlock Text="Durchläufe:" Margin="7 ,2" Grid.Column="2" Grid.Row="0"/>
-                        <sync:IntegerTextBox Value="{Binding Iterations, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Durchläufe" WatermarkTextIsVisible="True"
-                                             UseNullOption="True" Margin="2" Grid.Column="3" Grid.Row="0"/>
-                        <TextBlock Text="Probleme ?" Margin="2" Grid.Column="0" Grid.Row="2"/>
-                        <CheckBox Content="Etwas" Grid.Column="1" Grid.Row="2" Margin="2" IsChecked="{Binding Problems}"/>
-                        <CheckBox Content="Sehr" Grid.Column="3" Grid.Row="2" Margin="2" IsChecked="{Binding BigProblems}"/>
-                        <TextBlock Text="Länge x Breite:" Grid.Column="1" Grid.Row="4" Margin="2"/>
-                        <sync:SfMaskedEdit Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4" Margin="2" MaskType="RegEx" Mask="[0-9][0-9][05] cm x [0-9][0-9][05] cm" 
-                                           Text="{Binding FormatValue, UpdateSourceTrigger=PropertyChanged}" ToolTip="Die Letzte Stelle nur in 5 cm Schritten"/>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Header="Zeiten" Padding="3" Margin="5">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                            <RowDefinition Height="5"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Startzeit:" Margin="2, 10" TextAlignment="Center"/>
-                        <sync:SfDatePicker Value="{Binding StartDateTime}" Grid.Column="1" Grid.Row="0" Margin="2" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Zeit:" Grid.Column="2" Grid.Row="0" Margin="2, 10"/>
-                        <sync:TimeSpanEdit Grid.Column="3" Grid.Row="0" Margin="2" ValueChanged="TimeSpanEdit_OnValueChanged" Format="hh:mm" AllowNull="False" EnableExtendedScrolling="True"/>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Header="Ergebnis" Padding="3" Margin="5">
-                    <TextBlock Margin="2" Text="{Binding Result}"/>
-                </GroupBox>
-                <DockPanel LastChildFill="True">
-                    <Button Content="Einfügen" DockPanel.Dock="Right" Margin="5" Command="{Binding SaveCommand}"/>
-                    <Button DockPanel.Dock="Right" Content="Reset" Margin="5" Command="{Binding ResetCommand}"/>
-                    <TextBlock Margin="5" DockPanel.Dock="Right" Text="{Binding Status}" TextAlignment="Right" Foreground="{Binding StatusOk, Converter={StaticResource BoolToBrushConverter}}"/>
-                </DockPanel>
-            </StackPanel>
-        </sync:TabItemExt>
-    </sync:TabControlExt>
+    <sync:SfBusyIndicator AnimationType="DoubleCircle" IsBusy="{Binding IsOperationRunning}">
+        <sync:TabControlExt OnCloseButtonClick="TabControlExt_OnOnCloseButtonClick" OnCloseAllTabs="TabControlExt_OnOnCloseButtonClick" OnCloseOtherTabs="TabControlExt_OnOnCloseButtonClick">
+            <sync:TabItemExt Header="Einfügen">
+                <StackPanel>
+                    <GroupBox Header="Auflage" Padding="3" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Auflage:" Margin="2" VerticalAlignment="Center"/>
+                            <sync:IntegerTextBox Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Auflage" WatermarkTextIsVisible="True" 
+                                                 UseNullOption="True" Margin="2" Grid.Column="1" Grid.Row="0"/>
+                            <TextBlock Text="Durchläufe:" Margin="7 ,2" Grid.Column="2" Grid.Row="0" VerticalAlignment="Center"/>
+                            <sync:IntegerTextBox Value="{Binding Iterations, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Durchläufe" WatermarkTextIsVisible="True"
+                                                 UseNullOption="True" Margin="2" Grid.Column="3" Grid.Row="0"/>
+                            <TextBlock Text="Probleme ?" Margin="2" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
+                            <CheckBox Content="Etwas" Grid.Column="1" Grid.Row="2" Margin="2" IsChecked="{Binding Problems}"/>
+                            <CheckBox Content="Sehr" Grid.Column="3" Grid.Row="2" Margin="2" IsChecked="{Binding BigProblems}"/>
+                            <TextBlock Text="Breite x Länge:" Grid.Column="0" Grid.Row="4" Margin="2" VerticalAlignment="Center"/>
+                            <sync:SfMaskedEdit Grid.Column="1" Grid.Row="4" Margin="2" MaskType="RegEx" Mask="{x:Static bl:PaperFormat.UIFormat}" 
+                                               Text="{Binding PaperFormat, UpdateSourceTrigger=PropertyChanged}" ToolTip="Die Letzte Stelle nur in 5 cm Schritten"
+                                               Watermark="Bogen Format"/>
+                            <TextBlock Text="Geschwindigkeit:" Grid.Column="2" Grid.Row="4" Margin="2" VerticalAlignment="Center"/>
+                            <sync:DoubleTextBox Value="{Binding Speed, UpdateSourceTrigger=PropertyChanged}" WatermarkText="Geschwindigkeit" WatermarkTextIsVisible="True"
+                                                 UseNullOption="True" Margin="2" Grid.Column="3" Grid.Row="4"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Zeiten" Padding="3" Margin="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition Height="5"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Startzeit:" Margin="2, 10" TextAlignment="Center"/>
+                            <sync:SfDatePicker Value="{Binding StartDateTime}" Grid.Column="1" Grid.Row="0" Margin="2" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Zeit:" Grid.Column="2" Grid.Row="0" Margin="2, 10"/>
+                            <sync:TimeSpanEdit Grid.Column="3" Grid.Row="0" Margin="2" ValueChanged="TimeSpanEdit_OnValueChanged" Format="hh:mm" AllowNull="False" EnableExtendedScrolling="True"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Ergebnis" Padding="3" Margin="5">
+                        <TextBlock Margin="2" Text="{Binding Result}"/>
+                    </GroupBox>
+                    <DockPanel LastChildFill="True">
+                        <Button Content="Einfügen" DockPanel.Dock="Right" Margin="5" Command="{Binding SaveCommand}"/>
+                        <Button DockPanel.Dock="Right" Content="Reset" Margin="5" Command="{Binding ResetCommand}"/>
+                        <TextBlock Margin="5,8" DockPanel.Dock="Right" Text="{Binding Status}" TextAlignment="Right"
+                                   Foreground="{Binding StatusOk, Converter={StaticResource BoolToBrushConverter}}"/>
+                    </DockPanel>
+                </StackPanel>
+            </sync:TabItemExt>
+        </sync:TabControlExt>
+    </sync:SfBusyIndicator>
 </sync:ChromelessWindow>

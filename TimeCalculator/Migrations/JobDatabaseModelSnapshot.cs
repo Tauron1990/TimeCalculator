@@ -38,13 +38,15 @@ namespace TimeCalculator.Migrations
 
                     b.Property<bool>("Problem");
 
+                    b.Property<double>("Speed");
+
                     b.Property<DateTime>("StartTime");
 
                     b.Property<int>("Width");
 
                     b.HasKey("Id");
 
-                    b.ToTable("JopEntities");
+                    b.ToTable("JobEntities");
                 });
 #pragma warning restore 612, 618
         }

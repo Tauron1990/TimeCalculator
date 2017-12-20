@@ -45,6 +45,9 @@
     <Reference Include="DevExpress.Mvvm.UI, Version=17.1.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpressMvvm.17.1.6.0\lib\net40-client\DevExpress.Mvvm.UI.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Data.Sqlite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Sqlite.Core.2.0.0\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
     </Reference>
@@ -180,11 +183,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BL\CalculationInput.cs" />
-    <Compile Include="BL\CalculationOutput.cs" />
+    <Compile Include="BL\DTO\SaveInput.cs" />
+    <Compile Include="BL\DTO\SaveOutput.cs" />
+    <Compile Include="BL\DTO\ValidationInput.cs" />
+    <Compile Include="BL\DTO\ValidationOutput.cs" />
     <Compile Include="BL\ISimpleRule.cs" />
-    <Compile Include="BL\BuissinesRules.cs" />
-    <Compile Include="BL\Rules\CalculationRule.cs" />
+    <Compile Include="BL\BusinessRules.cs" />
+    <Compile Include="BL\PaperFormat.cs" />
+    <Compile Include="BL\Rules\SaveRule.cs" />
+    <Compile Include="BL\Rules\ValidationRule.cs" />
     <Compile Include="Converter\BoolToBrushConverter.cs" />
     <Compile Include="Data\JobDatabase.cs" />
     <Compile Include="Data\JobEntity.cs" />
@@ -195,9 +202,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />
-    <Compile Include="Migrations\20171219184938_Initial.cs" />
-    <Compile Include="Migrations\20171219184938_Initial.designer.cs">
-      <DependentUpon>20171219184938_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\20171220035904_Initial.cs" />
+    <Compile Include="Migrations\20171220035904_Initial.designer.cs">
+      <DependentUpon>20171220035904_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\JobDatabaseModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

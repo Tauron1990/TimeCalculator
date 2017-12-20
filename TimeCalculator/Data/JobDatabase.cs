@@ -7,7 +7,7 @@ namespace TimeCalculator.Data
 {
     public sealed class JobDatabase : DbContext
     {
-        public DbSet<JobEntity> JopEntities { get; set; }
+        public DbSet<JobEntity> JobEntities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

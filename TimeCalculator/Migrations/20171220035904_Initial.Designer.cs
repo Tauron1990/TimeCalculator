@@ -11,7 +11,7 @@ using TimeCalculator.Data;
 namespace TimeCalculator.Migrations
 {
     [DbContext(typeof(JobDatabase))]
-    [Migration("20171219184938_Initial")]
+    [Migration("20171220035904_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,13 +39,15 @@ namespace TimeCalculator.Migrations
 
                     b.Property<bool>("Problem");
 
+                    b.Property<double>("Speed");
+
                     b.Property<DateTime>("StartTime");
 
                     b.Property<int>("Width");
 
                     b.HasKey("Id");
 
-                    b.ToTable("JopEntities");
+                    b.ToTable("JobEntities");
                 });
 #pragma warning restore 612, 618
         }

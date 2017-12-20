@@ -20,6 +20,8 @@ namespace TimeCalculator.Data
 
         public int Width { get; set; }
 
+        public double Speed { get; set; }
+
         public DateTime StartTime { get; set; }
 
         public TimeSpan NormaizedTime { get; set; }

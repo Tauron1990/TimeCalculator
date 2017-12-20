@@ -2,12 +2,12 @@
 
 namespace TimeCalculator.BL
 {
-    public class CalculationOutput
+    public class ValidationOutput
     {
         public string FormatedResult { get; }
         public TimeSpan? NormalizedTime { get; }
 
-        public CalculationOutput(string formatedResult, TimeSpan? normalizedTime)
+        public ValidationOutput(string formatedResult, TimeSpan? normalizedTime)
         {
             FormatedResult = formatedResult;
             NormalizedTime = normalizedTime;
