@@ -13,11 +13,38 @@ namespace TimeCalculator
 {
     public sealed class MainWindowViewModel : ViewModelBase
     {
+        #region Common
+
         public MainWindowViewModel()
         {
             PropertyChanged += OnPropertyChanged;
+            _speedNotes = new SpeedNotes("Speed.Notes");
             Reset();
+            SetResultCalculation();
         }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            switch (propertyChangedEventArgs.PropertyName)
+            {
+                case nameof(CalcAmount):
+                case nameof(CalcIterations):
+                case nameof(CalcPaperFormat):
+                case nameof(CalcDrops):
+                case nameof(CalcSpeed):
+                    SetResultCalculation();
+                    break;
+                case nameof(PaperFormat):
+                case nameof(RunTime):
+                case nameof(Amount):
+                case nameof(Iterations):
+                case nameof(Speed):
+                    SetReultOfInsert();
+                    break;
+            }
+        }
+
+        #endregion
 
         #region Operations
 
@@ -27,8 +54,15 @@ namespace TimeCalculator
             set => SetProperty(() => IsOperationRunning, value);
         }
 
-        private void RunOperation(Action operation)
+        public string OperationTitle
         {
+            get => GetProperty(() => OperationTitle);
+            set => SetProperty(() => OperationTitle, value);
+        }
+
+        private void RunOperation(string title, Action operation)
+        {
+            OperationTitle = title;
             IsOperationRunning = true;
             operation();
             IsOperationRunning = false;
@@ -51,7 +85,7 @@ namespace TimeCalculator
             PaperFormat = null;
             Status = string.Empty;
             _saveOperationCompled = false;
-            SetReult();
+            SetReultOfInsert();
         }
 
         public double? Speed
@@ -118,25 +152,11 @@ namespace TimeCalculator
             set => SetProperty(() => Result, value);
         }
 
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            switch (propertyChangedEventArgs.PropertyName)
-            {
-                case nameof(PaperFormat):
-                case nameof(RunTime):
-                case nameof(Amount):
-                case nameof(Iterations):
-                case nameof(Speed):
-                    SetReult();
-                    break;
-            }
-        }
-
-        private void SetReult()
+        private void SetReultOfInsert()
         {
             if (_saveOperationCompled) Application.Current.Dispatcher.BeginInvoke(new Action(Reset), DispatcherPriority.Background);
 
-            var cresult = BusinessRules.ValidationRule.Action(new ValidationInput(Amount, Iterations, RunTime, new PaperFormat(PaperFormat), Speed));
+            var cresult = BusinessRules.InsertValidationRule.Action(new ValidationInput(Amount, Iterations, RunTime, new PaperFormat(PaperFormat), Speed));
 
             Result = cresult.FormatedResult;
 
@@ -163,7 +183,7 @@ namespace TimeCalculator
         [Command, UsedImplicitly]
         public void Save()
         {
-            RunOperation(() =>
+            RunOperation("Speichere Job",() =>
             {
                 try
                 {
@@ -199,6 +219,110 @@ namespace TimeCalculator
         public bool CanSave()
         {
             return !_saveOperationCompled && _insertOk;
+        }
+
+        [Command, UsedImplicitly]
+        public void CalculateTime()
+        {
+            var view = new RunTimeCalculator { Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
+
+            if (view.ShowDialog() != true) return;
+
+            var eff = view.EffectiveTime;
+            if(eff == null) return;
+
+            RunTime = eff.Value;
+        }
+
+        #endregion
+
+        #region Calculation
+
+        private readonly SpeedNotes _speedNotes;
+        private bool _canCalculate;
+
+        public string CalculatetRunTime
+        {
+            get => GetProperty(() => CalculatetRunTime);
+            set => SetProperty(() => CalculatetRunTime, value);
+        }
+
+        public string CalculatetSetupTime
+        {
+            get => GetProperty(() => CalculatetSetupTime);
+            set => SetProperty(() => CalculatetSetupTime, value);
+        }
+
+        public string CalculatetFullTime
+        {
+            get => GetProperty(() => CalculatetFullTime);
+            set => SetProperty(() => CalculatetFullTime, value);
+        }
+
+        public string CalculationStatus
+        {
+            get => GetProperty(() => CalculationStatus);
+            set => SetProperty(() => CalculationStatus, value);
+        }
+
+
+        public long? CalcAmount
+        {
+            get => GetProperty(() => CalcAmount);
+            set => SetProperty(() => CalcAmount, value);
+        }
+
+        public long? CalcIterations
+        {
+            get => GetProperty(() => CalcIterations);
+            set => SetProperty(() => CalcIterations, value);
+        }
+
+        public string CalcPaperFormat
+        {
+            get => GetProperty(() => CalcPaperFormat);
+            set => SetProperty(() => CalcPaperFormat, value);
+        }
+
+        public double? CalcSpeed
+        {
+            get => GetProperty(() => CalcSpeed);
+            set => SetProperty(() => CalcSpeed, value);
+        }
+
+        public long? CalcDrops
+        {
+            get => GetProperty(() => CalcDrops);
+            set => SetProperty(() => CalcDrops, value, CalcDropsChanged);
+        }
+
+        private void CalcDropsChanged()
+        {
+            if(CalcDrops == null) return;
+
+            CalcSpeed = _speedNotes.CalculateSpeed((int) CalcDrops.Value);
+        }
+
+        private void SetResultCalculation()
+        {
+            var result = BusinessRules.CalculateValidationRule.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
+
+            CalculationStatus = !result.Valid ? result.Message : "Start Bereit";
+
+            _canCalculate = result.Valid;
+
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        [Command]
+        public void Calculate()
+        {
+            
+        }
+
+        public bool CanCalculate()
+        {
+            return _canCalculate;
         }
 
         #endregion

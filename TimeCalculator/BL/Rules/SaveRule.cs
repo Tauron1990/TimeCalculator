@@ -6,7 +6,7 @@ namespace TimeCalculator.BL.Rules
     {
         public SaveOutput Action(SaveInput input)
         {
-            var normalizedResult = BusinessRules.ValidationRule.Action(new ValidationInput(input.Amount, input.Iteratins, input.RunTime, input.PaperFormat, input.Speed));
+            var normalizedResult = BusinessRules.InsertValidationRule.Action(new ValidationInput(input.Amount, input.Iteratins, input.RunTime, input.PaperFormat, input.Speed));
 
             if(normalizedResult.NormalizedTime == null) return new SaveOutput(false, normalizedResult.FormatedResult);
 

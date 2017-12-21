@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,5 +33,13 @@ namespace TimeCalculator
         }
 
         private void TimeSpanEdit_OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((MainWindowViewModel) DataContext).RunTime = (TimeSpan) e.NewValue;
+
+        private void BindableBase_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var model = (MainWindowViewModel) sender;
+
+            if (e.PropertyName == nameof(model.RunTime))
+                RunTimeElement.Value = model.RunTime;
+        }
     }
 }

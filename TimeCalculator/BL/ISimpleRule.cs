@@ -1,6 +1,6 @@
 ﻿namespace TimeCalculator.BL
 {
-    public interface ISimpleRule<TResult, TInput>
+    public interface ISimpleRule<out TResult, in TInput>
     {
         TResult Action(TInput input);
     }

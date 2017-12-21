@@ -3,22 +3,9 @@ using TimeCalculator.Properties;
 
 namespace TimeCalculator.BL.Rules
 {
-    public sealed class ValidationRule : ISimpleRule<ValidationOutput, ValidationInput>
+    public sealed class InsertValidationRule : ValidationRuleBase<ValidationOutput, ValidationInput>
     {
-        private sealed class AssertHelp
-        {
-            public string Message { get;  }
-
-            public bool Ok { get;  }
-
-            public AssertHelp(bool ok, string message)
-            {
-                Ok = ok;
-                Message = message;
-            }
-        }
-
-        public ValidationOutput Action(ValidationInput input)
+        public override ValidationOutput Action(ValidationInput input)
         {
             var settings = Settings.Default;
 
@@ -32,7 +19,7 @@ namespace TimeCalculator.BL.Rules
                 new AssertHelp(input.Format.Lenght > 29 && input.Format.Width > 19, "Format mindestens A4"),
                 new AssertHelp(input.Speed != null, "Geschwindigkeit wurde nicht gesetzt."),
                 new AssertHelp(input.Speed > 0, "Geschwindigkeit muss midestens 0,1 haben."),
-                new AssertHelp(input.Speed < 0.8, "Geschwindigkeit darf maximal 0,7 haben."),
+                new AssertHelp(input.Speed <= 0.7, "Geschwindigkeit darf maximal 0,7 haben."),
                 new AssertHelp(input.RunTime > TimeSpan.FromSeconds(1), "Die Laufzeit muss über 1 Sekunde Liegen.")
             }, out var formattedValue)) return new ValidationOutput(formattedValue, null);
 
@@ -41,7 +28,7 @@ namespace TimeCalculator.BL.Rules
 
             TimeSpan realRunTime = input.RunTime - TimeSpan.FromMinutes(iterationTime);
 
-            double runtime = realRunTime.TotalMinutes / input.Amount.Value * 1000d;
+            double runtime = realRunTime.TotalMinutes / input.Iteration.Value / input.Amount.Value * 1000d;
 
             TimeSpan? normalizedTime = TimeSpan.FromMinutes(runtime);
 
@@ -50,25 +37,6 @@ namespace TimeCalculator.BL.Rules
             // ReSharper restore PossibleInvalidOperationException
 
             return new ValidationOutput(formattedValue, normalizedTime);
-        }
-
-        private bool Assert(bool predicate, string message, out string value)
-        {
-            if (predicate)
-            {
-                value = null;
-                return true;
-            }
-            value = message;
-            return false;
-        }
-
-        private bool AssertList(AssertHelp[] asserts, out string value)
-        {
-            value = null;
-            foreach (var assert in asserts)
-                if (!Assert(assert.Ok, assert.Message, out value)) return false;
-            return true;
         }
     }
 }

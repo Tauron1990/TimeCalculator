@@ -19,7 +19,9 @@ namespace TimeCalculator.BL
             return rule;
         }
 
-        public static ISimpleRule<ValidationOutput, ValidationInput> ValidationRule => GetRule(nameof(ValidationRule), () => new ValidationRule());
+        public static ISimpleRule<ValidationOutput, ValidationInput> InsertValidationRule => GetRule(nameof(InsertValidationRule), () => new InsertValidationRule());
         public static ISimpleRule<SaveOutput, SaveInput> SaveRule => GetRule(nameof(SaveRule), () => new SaveRule());
+        public static ISimpleRule<CalculateTimeOutput, CalculateTimeInput> CalculateTimeRule => GetRule(nameof(CalculateTimeRule), () => new CalculateTimeRule());
+        public static ISimpleRule<CalculateValidateOutput, CalculateTimeInput> CalculateValidationRule => GetRule(nameof(CalculateValidationRule), () => new CalculationValidationRule());
     }
 }

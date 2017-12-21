@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TimeCalculator.Properties {
+namespace CompressionHelper.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,25 +25,25 @@ namespace TimeCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int IterationTime {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Target {
             get {
-                return ((int)(this["IterationTime"]));
+                return ((string)(this["Target"]));
             }
             set {
-                this["IterationTime"] = value;
+                this["Target"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
-        public int SetupTime {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Archive {
             get {
-                return ((int)(this["SetupTime"]));
+                return ((string)(this["Archive"]));
             }
             set {
-                this["SetupTime"] = value;
+                this["Archive"] = value;
             }
         }
     }
