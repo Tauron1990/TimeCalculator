@@ -19,9 +19,11 @@ namespace TimeCalculator.BL
             return rule;
         }
 
-        public static ISimpleRule<ValidationOutput, ValidationInput> InsertValidationRule => GetRule(nameof(InsertValidationRule), () => new InsertValidationRule());
-        public static ISimpleRule<SaveOutput, SaveInput> SaveRule => GetRule(nameof(SaveRule), () => new SaveRule());
-        public static ISimpleRule<CalculateTimeOutput, CalculateTimeInput> CalculateTimeRule => GetRule(nameof(CalculateTimeRule), () => new CalculateTimeRule());
-        public static ISimpleRule<CalculateValidateOutput, CalculateTimeInput> CalculateValidationRule => GetRule(nameof(CalculateValidationRule), () => new CalculationValidationRule());
+        public static ISimpleRule<ValidationOutput, ValidationInput> InsertValidation => GetRule(nameof(InsertValidation), () => new InsertValidationRule());
+        public static ISimpleRule<SaveOutput, SaveInput> Save => GetRule(nameof(Save), () => new SaveRule());
+        public static ISimpleRule<CalculateTimeOutput, CalculateTimeInput> CalculateTime => GetRule(nameof(CalculateTime), () => new CalculateTimeRule());
+        public static ISimpleRule<CalculateValidateOutput, CalculateTimeInput> CalculateValidation => GetRule(nameof(CalculateValidation), () => new CalculationValidationRule());
+        public static ISimpleRule<object, AddSetupInput> AddSetupItems => GetRule(nameof(AddSetupItems), () => new AddSetupItemRule());
+        public static ISimpleRule<object, object> RecalculateSetup => GetRule(nameof(RecalculateSetup), () => new RecalculateSetupRule());
     }
 }

@@ -1,15 +1,19 @@
-﻿<Application x:Class="TimeCalculator.App"
+﻿<Application
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:TimeCalculator"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf" x:Class="TimeCalculator.App"
              StartupUri="MainWindow.xaml" Startup="App_OnStartup">
     <Application.Resources>
-         <ResourceDictionary>
-             <ResourceDictionary.MergedDictionaries>
-                 <ResourceDictionary Source="DataDics/MS control.xaml"/>
-                 <ResourceDictionary Source="DataDics/BusyIndicator.xaml"/>
-                 <ResourceDictionary Source="DataDics/Editors.xaml"/>
-             </ResourceDictionary.MergedDictionaries>
-         </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DataDics/TimeSpanEdit.xaml"/>
+                <ResourceDictionary Source="DataDics/TabControlExt.xaml"/>
+                <ResourceDictionary Source="DataDics/DropDownButtonAdv.xaml"/>
+                <ResourceDictionary Source="DataDics/MS control.xaml"/>
+                <ResourceDictionary Source="DataDics/BusyIndicator.xaml"/>
+                <ResourceDictionary Source="DataDics/Editors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

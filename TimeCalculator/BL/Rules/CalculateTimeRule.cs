@@ -13,7 +13,7 @@ namespace TimeCalculator.BL.Rules
     {
         public CalculateTimeOutput Action([NotNull] CalculateTimeInput input)
         {
-            var valOutput = BusinessRules.CalculateValidationRule.Action(input);
+            var valOutput = BusinessRules.CalculateValidation.Action(input);
             if (!valOutput.Valid)
                 return new CalculateTimeOutput(null, null, null, valOutput.Message, PrecisionMode.NoData);
 

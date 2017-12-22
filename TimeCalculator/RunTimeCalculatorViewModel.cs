@@ -13,7 +13,7 @@ namespace TimeCalculator
         public RunTimeCalculatorViewModel()
         {
             CalculatorItems = new ObservableCollection<RunTimeCalculatorItem>();
-            AddItemCommand = new DelegateCommand(AddItem);
+            AddItemCommand = new DelegateCommand<RunTimeCalculatorItemType>(AddItem);
         }
 
         protected override void OnInitializeInDesignMode()
@@ -28,29 +28,50 @@ namespace TimeCalculator
             set => SetProperty(() => Current, value);
         }
 
-        public TimeSpan? EffectiveTime => GetEffectiveTime();
+        public RuntimeCalculatorResult EffectiveTime => GetEffectiveTime();
 
-        private TimeSpan? GetEffectiveTime()
+        private RuntimeCalculatorResult GetEffectiveTime()
         {
-            TimeSpan span = TimeSpan.Zero;
+            var result = new RuntimeCalculatorResult();
+
+            TimeSpan? span = TimeSpan.Zero;
 
             foreach (var item in CalculatorItems)
             {
+                switch (item.ItemType)
+                {
+                    case RunTimeCalculatorItemType.Iteration:
+                        result.Iterations.Add(item);
+                        break;
+                    case RunTimeCalculatorItemType.Setup:
+                        result.Setup = item;
+                        break;
+                }
+
                 var temp = item.CalculateDiffernce();
                 if (temp == null)
-                    return null;
+                {
+                    span = null;
+                    break;
+                }
 
                 span += temp.Value;
             }
 
-            return span;
+            result.Runtime = span;
+
+            return result;
         }
 
-        public DelegateCommand AddItemCommand { get; }
+        public DelegateCommand<RunTimeCalculatorItemType> AddItemCommand { get; }
 
-        public void AddItem()
+        private void AddItem(RunTimeCalculatorItemType parameter)
         {
-            CalculatorItems.Add(new RunTimeCalculatorItem());
+            if(CalculatorItems.Count > 0 && parameter == RunTimeCalculatorItemType.Setup) return;
+
+            var dateTime = DateTime.Now;
+
+            CalculatorItems.Add(new RunTimeCalculatorItem { ItemType = parameter, StartTime = new TimeSpan(dateTime.Hour, dateTime.Minute, 0)});
         }
 
         [Command, UsedImplicitly]

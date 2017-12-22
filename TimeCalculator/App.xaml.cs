@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,13 @@ namespace TimeCalculator
     {
         private void App_OnStartup(object sender, StartupEventArgs e)
         {
+            var currentThread = Thread.CurrentThread;
+
+            var culture = new CultureInfo("de-de");
+                
+            currentThread.CurrentCulture = culture;
+            currentThread.CurrentUICulture = culture;
+
             using (var db = new JobDatabase())
             {
                 db.Database.Migrate();

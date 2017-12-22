@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -161,7 +162,7 @@ namespace TimeCalculator
         {
             if (_saveOperationCompled) Application.Current.Dispatcher.BeginInvoke(new Action(Reset), DispatcherPriority.Background);
 
-            var cresult = BusinessRules.InsertValidationRule.Action(new ValidationInput(Amount, Iterations, RunTime, new PaperFormat(PaperFormat), Speed));
+            var cresult = BusinessRules.InsertValidation.Action(new ValidationInput(Amount, Iterations, RunTime, new PaperFormat(PaperFormat), Speed));
 
             Result = cresult.FormatedResult;
 
@@ -192,7 +193,7 @@ namespace TimeCalculator
             {
                 try
                 {
-                    var result = BusinessRules.SaveRule.Action(new SaveInput(Amount, Iterations, Problems, BigProblems, new PaperFormat(PaperFormat), Speed, StartDateTime, RunTime));
+                    var result = BusinessRules.Save.Action(new SaveInput(Amount, Iterations, Problems, BigProblems, new PaperFormat(PaperFormat), Speed, StartDateTime, RunTime));
 
                     if (result.Succsess)
                     {
@@ -229,15 +230,25 @@ namespace TimeCalculator
         [Command, UsedImplicitly]
         public void CalculateTime()
         {
-            var view = new RunTimeCalculator { Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
+            var view = new RunTimeCalculator {Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
 
             if (view.ShowDialog() != true) return;
 
-            var eff = view.EffectiveTime;
-            if(eff == null) return;
 
-            RunTime = eff.Value;
+            RunOperation("Laufzeit Berechnung", () =>
+            {
+                var eff = view.EffectiveTime;
+
+                BusinessRules.AddSetupItems.Action(new AddSetupInput(eff.Iterations.Concat(new[] {eff.Setup})));
+                BusinessRules.RecalculateSetup.Action(null);
+
+                if (eff.Runtime == null) return;
+
+                RunTime = eff.Runtime.Value;
+            });
         }
+
+
 
         #endregion
 
@@ -310,7 +321,7 @@ namespace TimeCalculator
 
         private void SetResultCalculation()
         {
-            var result = BusinessRules.CalculateValidationRule.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
+            var result = BusinessRules.CalculateValidation.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
 
             CalculationStatus = !result.Valid ? result.Message : "Start Bereit";
 
@@ -324,7 +335,7 @@ namespace TimeCalculator
         {
             RunOperation("Zeit Wird Berechnet", () =>
             {
-                var output = BusinessRules.CalculateTimeRule.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
+                var output = BusinessRules.CalculateTime.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
                 if (output.IterationTime == null)
                 {
                     CalculatetFullTime = "0";

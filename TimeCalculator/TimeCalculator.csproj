@@ -105,6 +105,7 @@
       <HintPath>..\packages\Microsoft.Extensions.Primitives.2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="PresentationFramework.Luna" />
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\packages\Remotion.Linq.2.2.0-alpha-004\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
@@ -179,23 +180,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BL\DTO\AddSetupInput.cs" />
     <Compile Include="BL\DTO\CalculateTimeInput.cs" />
     <Compile Include="BL\DTO\CalculateTimeOutput.cs" />
     <Compile Include="BL\DTO\CalculateValidateOutput.cs" />
     <Compile Include="BL\DTO\PrecisionMode.cs" />
+    <Compile Include="BL\Rules\AddSetupItemRule.cs" />
     <Compile Include="BL\Rules\CalculationValidationRule.cs" />
+    <Compile Include="BL\Rules\RecalculateSetupRule.cs" />
     <Compile Include="BL\Rules\ValidationRuleBase.cs" />
     <Compile Include="BL\Rules\CalculateTimeRule.cs" />
     <Compile Include="BL\SpeedNotes.cs" />
     <Compile Include="Data\SetupEntity.cs" />
     <Compile Include="Data\SetupType.cs" />
+    <Compile Include="Migrations\20171222163557_V1.cs" />
+    <Compile Include="Migrations\20171222163557_V1.designer.cs">
+      <DependentUpon>20171222163557_V1.cs</DependentUpon>
+    </Compile>
     <Compile Include="RunTimeCalculator.xaml.cs">
       <DependentUpon>RunTimeCalculator.xaml</DependentUpon>
     </Compile>
     <Compile Include="RunTimeCalculatorItem.cs" />
     <Compile Include="RunTimeCalculatorItemType.cs" />
+    <Compile Include="RuntimeCalculatorResult.cs" />
     <Compile Include="RunTimeCalculatorViewModel.cs" />
     <Page Include="DataDics\BusyIndicator.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataDics\DropDownButtonAdv.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -204,6 +217,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="DataDics\MS control.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataDics\TabControlExt.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DataDics\TimeSpanEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

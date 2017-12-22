@@ -8,7 +8,7 @@
         xmlns:sync="http://schemas.syncfusion.com/wpf"
         xmlns:bl="clr-namespace:TimeCalculator.BL"
         mc:Ignorable="d"
-        Title="Time Calculator" Height="370" Width="450" Icon="if_time machine_49027.ico" WindowStartupLocation="CenterScreen">
+        Title="Time Calculator" Height="380" Width="450" Icon="if_time machine_49027.ico" WindowStartupLocation="CenterScreen">
     <sync:ChromelessWindow.DataContext>
         <local:MainWindowViewModel PropertyChanged="BindableBase_OnPropertyChanged"/>
     </sync:ChromelessWindow.DataContext>

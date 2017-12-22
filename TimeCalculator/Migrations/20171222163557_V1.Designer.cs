@@ -11,9 +11,10 @@ using TimeCalculator.Data;
 namespace TimeCalculator.Migrations
 {
     [DbContext(typeof(JobDatabase))]
-    partial class JobDatabaseModelSnapshot : ModelSnapshot
+    [Migration("20171222163557_V1")]
+    partial class V1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
