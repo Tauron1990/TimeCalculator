@@ -314,16 +314,52 @@ namespace TimeCalculator
             CommandManager.InvalidateRequerySuggested();
         }
 
-        [Command]
+        [Command, UsedImplicitly]
         public void Calculate()
         {
-            
+            RunOperation("Zeif Wird Berechnet", () =>
+            {
+                var output = BusinessRules.CalculateTimeRule.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
+                if (output.IterationTime == null)
+                {
+                    CalculatetFullTime = "0";
+                    CalculatetRunTime = "0";
+                    CalculatetSetupTime = "0";
+                    CalculationStatus = output.Error;
+                }
+                else
+                {
+                    CalculationStatus = $"OK ({FormatPrecision(output.PrecisionMode)})";
+                    CalculatetRunTime = FormatTime(output.RunTime);
+                    CalculatetFullTime = FormatTime(output.IterationTime + output.RunTime + output.SetupTime);
+                    CalculatetSetupTime = $"{FormatTime(output.IterationTime + output.SetupTime)} (Einrichtezeit: {FormatTime(output.SetupTime)} - Durchlaufzeit: {FormatTime(output.IterationTime)})";
+                }
+            });
         }
 
-        public bool CanCalculate()
+        private string FormatTime(int? value) => TimeSpan.FromMinutes(value ?? 0).ToString("hh:mm");
+
+        private string FormatPrecision(PrecisionMode precisionMode)
         {
-            return _canCalculate;
+            switch (precisionMode)
+            {
+                case PrecisionMode.Perfect:
+                    return "Hohe Zuverlässigkeit";
+                case PrecisionMode.NearCorner:
+                    return "Mittlere Zuverlässigkeit";
+                case PrecisionMode.AmountMismatchPerfect:
+                    return "Hochrechnumt mit Mittlerer Zuverlässigkeit";
+                case PrecisionMode.AmountMismatchNearCorner:
+                    return "Hochrechnung mit Nidriger Zuverlässigkeit";
+                case PrecisionMode.NoData:
+                    return "Keine Daten";
+                default:
+                    return string.Empty;
+            }
         }
+
+        [UsedImplicitly]
+        public bool CanCalculate() => _canCalculate;
 
         #endregion
     }

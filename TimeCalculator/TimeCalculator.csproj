@@ -25,6 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -171,6 +172,7 @@
     <Compile Include="BL\DTO\CalculateTimeInput.cs" />
     <Compile Include="BL\DTO\CalculateTimeOutput.cs" />
     <Compile Include="BL\DTO\CalculateValidateOutput.cs" />
+    <Compile Include="BL\DTO\PrecisionMode.cs" />
     <Compile Include="BL\Rules\CalculationValidationRule.cs" />
     <Compile Include="BL\Rules\ValidationRuleBase.cs" />
     <Compile Include="BL\Rules\CalculateTimeRule.cs" />
