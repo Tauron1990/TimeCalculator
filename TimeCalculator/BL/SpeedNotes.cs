@@ -67,7 +67,7 @@ namespace TimeCalculator.BL
 
             try
             {
-                return Interpolate.Common(_nodes.Select(n => (double) n.Drops), _nodes.Select(n => n.Speed)).Interpolate(drops);
+                return Math.Round(Interpolate.Common(_nodes.Select(n => (double) n.Drops), _nodes.Select(n => n.Speed)).Interpolate(drops), 3);
             }
             catch (ArgumentException)
             {

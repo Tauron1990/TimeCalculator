@@ -8,5 +8,17 @@
     <Setting Name="SetupTime" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">30</Value>
     </Setting>
+    <Setting Name="PefectDifference" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.01</Value>
+    </Setting>
+    <Setting Name="NearCornerDifference" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.3</Value>
+    </Setting>
+    <Setting Name="EntityExpire" Type="System.Int64" Scope="User">
+      <Value Profile="(Default)">1576800000000000</Value>
+    </Setting>
+    <Setting Name="AmoutMismatch" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

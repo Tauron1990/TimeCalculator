@@ -39,6 +39,16 @@
   <PropertyGroup>
     <ApplicationIcon>if_time machine_49027.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Jetvarnish|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>C:\Temp\test\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.Mvvm, Version=17.1.0.0, Culture=neutral, PublicKeyToken=382ad28f6ae31f30, processorArchitecture=MSIL">
       <HintPath>..\packages\DevExpressMvvm.17.1.6.0\lib\net40-client\DevExpress.Mvvm.dll</HintPath>
@@ -177,10 +187,13 @@
     <Compile Include="BL\Rules\ValidationRuleBase.cs" />
     <Compile Include="BL\Rules\CalculateTimeRule.cs" />
     <Compile Include="BL\SpeedNotes.cs" />
+    <Compile Include="Data\SetupEntity.cs" />
+    <Compile Include="Data\SetupType.cs" />
     <Compile Include="RunTimeCalculator.xaml.cs">
       <DependentUpon>RunTimeCalculator.xaml</DependentUpon>
     </Compile>
     <Compile Include="RunTimeCalculatorItem.cs" />
+    <Compile Include="RunTimeCalculatorItemType.cs" />
     <Compile Include="RunTimeCalculatorViewModel.cs" />
     <Page Include="DataDics\BusyIndicator.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -8,6 +9,7 @@ using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using JetBrains.Annotations;
 using TimeCalculator.BL;
+using TimeCalculator.Properties;
 
 namespace TimeCalculator
 {
@@ -41,7 +43,7 @@ namespace TimeCalculator
                 case nameof(Speed):
                     SetReultOfInsert();
                     break;
-            }
+            }      
         }
 
         #endregion
@@ -64,8 +66,11 @@ namespace TimeCalculator
         {
             OperationTitle = title;
             IsOperationRunning = true;
-            operation();
-            IsOperationRunning = false;
+            Task.Run(() =>
+            {
+                operation();
+                IsOperationRunning = false;
+            });
         }
 
         #endregion
@@ -317,7 +322,7 @@ namespace TimeCalculator
         [Command, UsedImplicitly]
         public void Calculate()
         {
-            RunOperation("Zeif Wird Berechnet", () =>
+            RunOperation("Zeit Wird Berechnet", () =>
             {
                 var output = BusinessRules.CalculateTimeRule.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
                 if (output.IterationTime == null)
@@ -337,7 +342,7 @@ namespace TimeCalculator
             });
         }
 
-        private string FormatTime(int? value) => TimeSpan.FromMinutes(value ?? 0).ToString("hh:mm");
+        private string FormatTime(TimeSpan? value) => value?.ToString("hh:mm");
 
         private string FormatPrecision(PrecisionMode precisionMode)
         {
@@ -360,6 +365,48 @@ namespace TimeCalculator
 
         [UsedImplicitly]
         public bool CanCalculate() => _canCalculate;
+
+        #endregion
+
+        #region Settings
+
+        private readonly Settings _settings = Settings.Default;
+
+        public int IterationTimeSetting
+        {
+            get => _settings.IterationTime;
+            set { _settings.IterationTime = value; _settings.Save(); }
+        }
+
+        public int SetupTimeSetting
+        {
+            get => _settings.SetupTime;
+            set { _settings.SetupTime = value; _settings.Save(); }
+        }
+
+        public double DifferenzPerfectSetting
+        {
+            get => _settings.PefectDifference;
+            set { _settings.PefectDifference = value; _settings.Save(); }
+        }
+
+        public double DifferenzNearSetting
+        {
+            get => _settings.NearCornerDifference;
+            set { _settings.NearCornerDifference = value; _settings.Save(); }
+        }
+
+        public int AmoutToleranceSetting
+        {
+            get => _settings.AmoutMismatch;
+            set { _settings.AmoutMismatch = value; _settings.Save(); }
+        }
+
+        public TimeSpan TimeExpireSetting
+        {
+            get => TimeSpan.FromTicks(_settings.EntityExpire);
+            set { _settings.EntityExpire = value.Ticks; _settings.Save(); }
+        }
 
         #endregion
     }

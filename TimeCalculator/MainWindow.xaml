@@ -8,7 +8,7 @@
         xmlns:sync="http://schemas.syncfusion.com/wpf"
         xmlns:bl="clr-namespace:TimeCalculator.BL"
         mc:Ignorable="d"
-        Title="Time Colculator" Height="370" Width="450" Icon="if_time machine_49027.ico" WindowStartupLocation="CenterScreen">
+        Title="Time Calculator" Height="370" Width="450" Icon="if_time machine_49027.ico" WindowStartupLocation="CenterScreen">
     <sync:ChromelessWindow.DataContext>
         <local:MainWindowViewModel PropertyChanged="BindableBase_OnPropertyChanged"/>
     </sync:ChromelessWindow.DataContext>
@@ -22,7 +22,7 @@
             </conv:BoolToBrushConverter.TrueBrush>
         </conv:BoolToBrushConverter>
     </sync:ChromelessWindow.Resources>
-    <sync:SfBusyIndicator AnimationType="DoubleCircle" IsBusy="{Binding IsOperationRunning}" Header="{Binding OperationTitle}">
+    <sync:SfBusyIndicator IsBusy="{Binding IsOperationRunning}" AnimationType="DoubleCircle" Header="{Binding OperationTitle}">
         <sync:TabControlExt OnCloseButtonClick="TabControlExt_OnOnCloseButtonClick" OnCloseAllTabs="TabControlExt_OnOnCloseButtonClick" OnCloseOtherTabs="TabControlExt_OnOnCloseButtonClick">
             <sync:TabItemExt Header="Einfügen">
                 <StackPanel>
@@ -115,16 +115,17 @@
                                                  Value="{Binding CalcDrops, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Geschwindigkeit:" Grid.Column="2" Grid.Row="0" Margin="2" VerticalAlignment="Center"/>
                             <sync:DoubleTextBox Grid.Column="3" Grid.Row="0" Margin="2" UseNullOption="True" WatermarkTextIsVisible="True" WatermarkText="Geschwindikeit" 
-                                                Value="{Binding CalcSpeed}"/>
+                                                Value="{Binding CalcSpeed, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Bogenlänge:" Grid.Column="0" Grid.Row="2" Margin="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                             <sync:SfMaskedEdit  Grid.Column="1"  Grid.Row="2" Margin="2" MaskType="RegEx" Mask="{x:Static bl:PaperFormat.UIFormat}" 
                                                 Text="{Binding CalcPaperFormat, UpdateSourceTrigger=PropertyChanged}" ToolTip="Die Letzte Stelle nur in 5 cm Schritten"
                                                 Watermark="Bogen Format"/>
                             <TextBlock Text="Durchläufe:" Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" Margin="2"/>
                             <sync:IntegerTextBox Grid.Column="3" Grid.Row="2" Margin="2" UseNullOption="True" WatermarkTextIsVisible="True" WatermarkText="Durchläufe"
-                                                 Value="{Binding CalcIterations}"/>
+                                                 Value="{Binding CalcIterations, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Auflage:" Margin="2" VerticalAlignment="Center" Grid.Column="0" Grid.Row="4"/>
-                            <sync:IntegerTextBox Margin="2" Grid.Column="1" Grid.Row="4" WatermarkText="Auflage" WatermarkTextIsVisible="True" Value="{Binding CalcAmount}"/>
+                            <sync:IntegerTextBox Margin="2" Grid.Column="1" Grid.Row="4" WatermarkText="Auflage" WatermarkTextIsVisible="True" 
+                                                 Value="{Binding CalcAmount, UpdateSourceTrigger=PropertyChanged}"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Ergebnis" Margin="5, 10" Padding="3" DockPanel.Dock="Top">
@@ -143,17 +144,48 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Laufzeit:"/>
-                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding CalculatetRunTime}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding CalculatetRunTime}" Margin="10,0"/>
                             <TextBlock Text="Rüstzeit:" Grid.Column="0" Grid.Row="2"/>
-                            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding CalculatetSetupTime}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding CalculatetSetupTime}" Margin="10,0"/>
                             <TextBlock Text="Gesamtzeit:" Grid.Column="0" Grid.Row="4"/>
-                            <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding CalculatetFullTime}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding CalculatetFullTime}" Margin="10,0"/>
                             <TextBlock Text="Status:" Grid.Column="0" Grid.Row="6"/>
-                            <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding CalculationStatus}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding CalculationStatus}" Margin="10,0"/>
                         </Grid>
                     </GroupBox>               
                     <Button DockPanel.Dock="Right" VerticalAlignment="Center" Content="Berechnen" Margin="5" Command="{Binding CalculateCommand}"/>
                 </DockPanel>
+            </sync:TabItemExt>
+            <sync:TabItemExt Header="Einstellungen">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Pro Durchlauf (min):" Margin="2" VerticalAlignment="Center"/>
+                    <sync:IntegerTextBox Grid.Row="0" Grid.Column="1" Margin="2" Value="{Binding IterationTimeSetting, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Rüstzeit (min):" Grid.Row="1" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+                    <sync:IntegerTextBox Grid.Row="1" Grid.Column="1" Margin="2" Value="{Binding SetupTimeSetting, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Differenz Perfekt:" Grid.Row="2" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+                    <sync:DoubleTextBox Grid.Row="2" Grid.Column="1" Margin="2" Value="{Binding DifferenzPerfectSetting, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Differnz Annäherung:" Grid.Row="3" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+                    <sync:DoubleTextBox Grid.Row="3" Grid.Column="1" Margin="2" Value="{Binding DifferenzNearSetting, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Eintrag Haltbarkeit:" Grid.Row="4" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+                    <sync:TimeSpanEdit Grid.Row="4" Grid.Column="1" Margin="2" Value="{Binding TimeExpireSetting, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Toleranz Auflage:" Grid.Row="5" Grid.Column="0" Margin="2" VerticalAlignment="Center"/>
+                    <sync:IntegerTextBox Grid.Row="5" Grid.Column="1" Margin="2" Value="{Binding AmoutToleranceSetting, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                </Grid>
             </sync:TabItemExt>
         </sync:TabControlExt>
     </sync:SfBusyIndicator>

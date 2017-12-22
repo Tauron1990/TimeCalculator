@@ -1,16 +1,18 @@
-﻿namespace TimeCalculator.BL
+﻿using System;
+
+namespace TimeCalculator.BL
 {
     public sealed class CalculateTimeOutput
     {
-        public int? SetupTime { get; }
-        public int? IterationTime { get; }
-        public int? RunTime { get; }
+        public TimeSpan? SetupTime { get; }
+        public TimeSpan? IterationTime { get; }
+        public TimeSpan? RunTime { get; }
         
         public string Error { get; }
         public PrecisionMode PrecisionMode { get; }
 
 
-        public CalculateTimeOutput(int? setupTime, int? iterationTime, int? runTime, string error, PrecisionMode precisionMode)
+        public CalculateTimeOutput(TimeSpan? setupTime, TimeSpan? iterationTime, TimeSpan? runTime, string error, PrecisionMode precisionMode)
         {
             SetupTime = setupTime;
             IterationTime = iterationTime;

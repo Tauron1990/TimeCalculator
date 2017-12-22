@@ -17,6 +17,8 @@ namespace TimeCalculator
             set => SetProperty(() => EndTime, value);
         }
 
+        public RunTimeCalculatorItemType ItemType { get; set; }
+
         public TimeSpan? CalculateDiffernce()
         {
             if (EndTime < StartTime) return null;

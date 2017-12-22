@@ -46,5 +46,53 @@ namespace TimeCalculator.Properties {
                 this["SetupTime"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.01")]
+        public double PefectDifference {
+            get {
+                return ((double)(this["PefectDifference"]));
+            }
+            set {
+                this["PefectDifference"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public double NearCornerDifference {
+            get {
+                return ((double)(this["NearCornerDifference"]));
+            }
+            set {
+                this["NearCornerDifference"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1576800000000000")]
+        public long EntityExpire {
+            get {
+                return ((long)(this["EntityExpire"]));
+            }
+            set {
+                this["EntityExpire"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2000")]
+        public int AmoutMismatch {
+            get {
+                return ((int)(this["AmoutMismatch"]));
+            }
+            set {
+                this["AmoutMismatch"] = value;
+            }
+        }
     }
 }

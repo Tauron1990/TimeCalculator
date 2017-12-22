@@ -9,6 +9,8 @@ namespace TimeCalculator.Data
     {
         public DbSet<JobEntity> JobEntities { get; set; }
 
+        public DbSet<SetupEntity> SetupEntities { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string pathFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron", "TimeCalculator");
