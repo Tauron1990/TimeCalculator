@@ -23,7 +23,8 @@
         </conv:BoolToBrushConverter>
     </sync:ChromelessWindow.Resources>
     <sync:SfBusyIndicator IsBusy="{Binding IsOperationRunning}" AnimationType="DoubleCircle" Header="{Binding OperationTitle}">
-        <sync:TabControlExt OnCloseButtonClick="TabControlExt_OnOnCloseButtonClick" OnCloseAllTabs="TabControlExt_OnOnCloseButtonClick" OnCloseOtherTabs="TabControlExt_OnOnCloseButtonClick">
+        <sync:TabControlExt OnCloseButtonClick="TabControlExt_OnOnCloseButtonClick" OnCloseAllTabs="TabControlExt_OnOnCloseButtonClick" OnCloseOtherTabs="TabControlExt_OnOnCloseButtonClick"
+                            SelectedIndex="{Binding SelectedTabIndex}">
             <sync:TabItemExt Header="Einfügen">
                 <StackPanel>
                     <GroupBox Header="Auflage" Padding="3" Margin="5">
@@ -152,8 +153,11 @@
                             <TextBlock Text="Status:" Grid.Column="0" Grid.Row="6"/>
                             <TextBlock Grid.Column="1" Grid.Row="6" Text="{Binding CalculationStatus}" Margin="10,0"/>
                         </Grid>
-                    </GroupBox>               
-                    <Button DockPanel.Dock="Right" VerticalAlignment="Center" Content="Berechnen" Margin="5" Command="{Binding CalculateCommand}"/>
+                    </GroupBox>
+                        <Button DockPanel.Dock="Right" VerticalAlignment="Center" Content="Berechnen" Margin="5"
+                                Command="{Binding CalculateCommand}" />
+                        <Button DockPanel.Dock="Right" VerticalAlignment="Center" Content="Übertragen" Margin="5"
+                                Command="{Binding ExchangeCommand}"/>    
                 </DockPanel>
             </sync:TabItemExt>
             <sync:TabItemExt Header="Einstellungen">

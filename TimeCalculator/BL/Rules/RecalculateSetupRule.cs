@@ -26,6 +26,8 @@ namespace TimeCalculator.BL.Rules
                 }
             }
 
+            Properties.Settings.Default.Save();
+
             return null;
         }
     }

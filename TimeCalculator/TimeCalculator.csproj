@@ -122,6 +122,7 @@
       <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.9\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfBusyIndicator.WPF, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
+    <Reference Include="Syncfusion.SfChart.Wpf, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="Syncfusion.SfChromelessWindow.WPF, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL" />
     <Reference Include="Syncfusion.SfInput.WPF, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
     <Reference Include="Syncfusion.SfShared.WPF, Version=15.4460.0.17, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89" />
@@ -191,6 +192,8 @@
     <Compile Include="BL\Rules\ValidationRuleBase.cs" />
     <Compile Include="BL\Rules\CalculateTimeRule.cs" />
     <Compile Include="BL\SpeedNotes.cs" />
+    <Compile Include="Data\FilesHelper.cs" />
+    <Compile Include="Data\SessionManager.cs" />
     <Compile Include="Data\SetupEntity.cs" />
     <Compile Include="Data\SetupType.cs" />
     <Compile Include="Migrations\20171222163557_V1.cs" />
@@ -220,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <None Include="DataDics\SfChart.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </None>
     <Page Include="DataDics\TabControlExt.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using JetBrains.Annotations;
@@ -18,7 +19,7 @@ namespace TimeCalculator
 
         protected override void OnInitializeInDesignMode()
         {
-            CalculatorItems.Add(new RunTimeCalculatorItem { EndTime = new TimeSpan(0,16,0,0), StartTime = new TimeSpan(0,7,0,0)});
+            CalculatorItems.Add(new RunTimeCalculatorItem(RunTimeCalculatorItemType.Running, new TimeSpan(0,7,0,0)) { EndTime = new TimeSpan(0,16,0,0)});
             base.OnInitializeInDesignMode();
         }
 
@@ -71,7 +72,34 @@ namespace TimeCalculator
 
             var dateTime = DateTime.Now;
 
-            CalculatorItems.Add(new RunTimeCalculatorItem { ItemType = parameter, StartTime = new TimeSpan(dateTime.Hour, dateTime.Minute, 0)});
+            CalculatorItems.Add(new RunTimeCalculatorItem(parameter, new TimeSpan(dateTime.Hour, dateTime.Minute, 0)));
+        }
+
+        [UsedImplicitly]
+        public void AddItemSpecial()
+        {
+            if (CalculatorItems.Count == 0)
+            {
+                AddItem(RunTimeCalculatorItemType.Setup);
+                return;
+            }
+
+            var dateTime = DateTime.Now;
+            var last = CalculatorItems.Last();
+            last.EndTime = new TimeSpan(dateTime.Hour, dateTime.Minute, 0);
+
+            switch (last.ItemType)
+            {
+                case RunTimeCalculatorItemType.Iteration:
+                case RunTimeCalculatorItemType.Setup:
+                    AddItem(RunTimeCalculatorItemType.Running);
+                    break;
+                case RunTimeCalculatorItemType.Running:
+                    AddItem(RunTimeCalculatorItemType.Iteration);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         [Command, UsedImplicitly]

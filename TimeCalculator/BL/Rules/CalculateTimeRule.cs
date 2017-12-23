@@ -15,7 +15,7 @@ namespace TimeCalculator.BL.Rules
         {
             var valOutput = BusinessRules.CalculateValidation.Action(input);
             if (!valOutput.Valid)
-                return new CalculateTimeOutput(null, null, null, valOutput.Message, PrecisionMode.NoData);
+                return new CalculateTimeOutput(null, null, null, valOutput.Message, PrecisionMode.InValid);
 
             Dictionary<PrecisionMode, List<JobEntity>> dic = AggregateEntitys(input);
 

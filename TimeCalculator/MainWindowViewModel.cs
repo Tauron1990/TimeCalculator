@@ -8,8 +8,10 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
+using DevExpress.Mvvm.Native;
 using JetBrains.Annotations;
 using TimeCalculator.BL;
+using TimeCalculator.Data;
 using TimeCalculator.Properties;
 
 namespace TimeCalculator
@@ -47,6 +49,23 @@ namespace TimeCalculator
             }      
         }
 
+        public int SelectedTabIndex
+        {
+            get => GetProperty(() => SelectedTabIndex);
+            set => SetProperty(() => SelectedTabIndex, value);
+        }
+
+        protected override void OnInitializeInRuntime()
+        {
+            base.OnInitializeInRuntime();
+            InitializeSettings();
+        }
+
+        protected override PropertyManager CreatePropertyManager()
+        {
+            return SessionManager.CreateManager(nameof(MainWindowViewModel));
+        }
+
         #endregion
 
         #region Operations
@@ -81,6 +100,7 @@ namespace TimeCalculator
         [Command, UsedImplicitly]
         public void Reset()
         {
+            ResetCalc();
             Speed = null;
             Amount = null;
             Iterations = null;
@@ -92,6 +112,8 @@ namespace TimeCalculator
             Status = string.Empty;
             _saveOperationCompled = false;
             SetReultOfInsert();
+
+            SelectedTabIndex = 1;
         }
 
         public double? Speed
@@ -230,7 +252,12 @@ namespace TimeCalculator
         [Command, UsedImplicitly]
         public void CalculateTime()
         {
-            var view = new RunTimeCalculator {Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
+            CalculateTimeImpl(false);
+        }
+
+        private void CalculateTimeImpl(bool addSetup)
+        {
+            var view = new RunTimeCalculator(addSetup) {Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
 
             if (view.ShowDialog() != true) return;
 
@@ -248,14 +275,15 @@ namespace TimeCalculator
             });
         }
 
-
-
         #endregion
 
         #region Calculation
 
         private readonly SpeedNotes _speedNotes;
         private bool _canCalculate;
+        private TimeSpan? _fullRunTime;
+        private bool _calculationSuccessFull;
+        private DateTime _calcTime;
 
         public string CalculatetRunTime
         {
@@ -326,6 +354,7 @@ namespace TimeCalculator
             CalculationStatus = !result.Valid ? result.Message : "Start Bereit";
 
             _canCalculate = result.Valid;
+            _calculationSuccessFull = false;
 
             CommandManager.InvalidateRequerySuggested();
         }
@@ -335,21 +364,29 @@ namespace TimeCalculator
         {
             RunOperation("Zeit Wird Berechnet", () =>
             {
+                _calcTime = DateTime.Now;
+
                 var output = BusinessRules.CalculateTime.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
-                if (output.IterationTime == null)
+                if (output.PrecisionMode == PrecisionMode.InValid || output.PrecisionMode == PrecisionMode.NoData)
                 {
                     CalculatetFullTime = "0";
                     CalculatetRunTime = "0";
                     CalculatetSetupTime = "0";
                     CalculationStatus = output.Error;
+                    _calculationSuccessFull = output.PrecisionMode != PrecisionMode.InValid;
+                    _fullRunTime = null;
                 }
                 else
                 {
+                    _fullRunTime = output.IterationTime + output.RunTime + output.SetupTime;
                     CalculationStatus = $"OK ({FormatPrecision(output.PrecisionMode)})";
                     CalculatetRunTime = FormatTime(output.RunTime);
-                    CalculatetFullTime = FormatTime(output.IterationTime + output.RunTime + output.SetupTime);
+                    CalculatetFullTime = FormatTime(_fullRunTime);
                     CalculatetSetupTime = $"{FormatTime(output.IterationTime + output.SetupTime)} (Einrichtezeit: {FormatTime(output.SetupTime)} - Durchlaufzeit: {FormatTime(output.IterationTime)})";
+                    _calculationSuccessFull = true;
                 }
+
+                CommandManager.InvalidateRequerySuggested();
             });
         }
 
@@ -376,6 +413,35 @@ namespace TimeCalculator
 
         [UsedImplicitly]
         public bool CanCalculate() => _canCalculate;
+
+        private void ResetCalc()
+        {
+            CalcAmount = null;
+            CalcDrops = null;
+            CalcIterations = null;
+            CalcSpeed = null;
+            CalcPaperFormat = null;
+            CalculatetFullTime = string.Empty;
+            CalculatetRunTime = string.Empty;
+            CalculatetSetupTime = string.Empty;
+        }
+
+        [Command, UsedImplicitly]
+        public void Exchange()
+        {
+            PaperFormat = CalcPaperFormat;
+            RunTime = _fullRunTime ?? TimeSpan.Zero;
+            Speed = CalcSpeed;
+            Amount = CalcAmount;
+            Iterations = CalcIterations;
+            StartDateTime = _calcTime;
+
+            SelectedTabIndex = 0;
+            CalculateTimeImpl(true);
+        }
+
+        [UsedImplicitly]
+        public bool CanExchange() => _calculationSuccessFull;
 
         #endregion
 
@@ -417,6 +483,22 @@ namespace TimeCalculator
         {
             get => TimeSpan.FromTicks(_settings.EntityExpire);
             set { _settings.EntityExpire = value.Ticks; _settings.Save(); }
+        }
+
+        private void InitializeSettings()
+        {
+            _settings.PropertyChanged += (sender, args) =>
+            {
+                switch (args.PropertyName)
+                {
+                    case nameof(_settings.IterationTime):
+                        RaisePropertyChanged(nameof(IterationTimeSetting));
+                        break;
+                    case nameof(_settings.SetupTime):
+                        RaisePropertyChanged(nameof(SetupTimeSetting));
+                        break;
+                }
+            };
         }
 
         #endregion

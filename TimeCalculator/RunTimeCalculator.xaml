@@ -16,11 +16,11 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <sync:DropDownButtonAdv Label="Einfügen" Margin="10">
+            <sync:DropDownButtonAdv Label="Einfügen" Margin="10" >
                 <sync:DropDownMenuGroup>
-                    <MenuItem Header="Laufzeit" IsCheckable="False" Command="{Binding AddItemCommand}" CommandParameter="{x:Static local:RunTimeCalculatorItemType.Running}"/>
-                    <MenuItem Header="Durchlauf" IsCheckable="False" Command="{Binding AddItemCommand}" CommandParameter="{x:Static local:RunTimeCalculatorItemType.Iteration}"/>
-                    <MenuItem Header="Rüstzeit" IsCheckable="False" Command="{Binding AddItemCommand}" CommandParameter="{x:Static local:RunTimeCalculatorItemType.Setup}"/>
+                    <sync:DropDownMenuItem Header="Laufzeit" IsCheckable="False" Command="{Binding AddItemCommand}" CommandParameter="{x:Static local:RunTimeCalculatorItemType.Running}"/>
+                    <sync:DropDownMenuItem Header="Durchlauf" IsCheckable="False" Command="{Binding AddItemCommand}" CommandParameter="{x:Static local:RunTimeCalculatorItemType.Iteration}"/>
+                    <sync:DropDownMenuItem Header="Rüstzeit" IsCheckable="False" Command="{Binding AddItemCommand}" CommandParameter="{x:Static local:RunTimeCalculatorItemType.Setup}"/>
                 </sync:DropDownMenuGroup>
             </sync:DropDownButtonAdv>
             <Button Content="Entfernen" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Command="{Binding RemoveCommand}" />
@@ -32,13 +32,20 @@
         <ListBox SelectedItem="{Binding Current}" SelectionMode="Single" ItemsSource="{Binding CalculatorItems}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="local:RunTimeCalculatorItem">
-                    <Border BorderBrush="Black" BorderThickness="1">
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <sync:SfTimePicker Value="{Binding StartTime}" Margin="2" ValueChanged="Start_TimeSpanEdit_OnValueChanged" FormatString="HH:mm"/>
-                            <Line X1="2" Y1="18" X2="19" Y2="18" Stroke="Black" StrokeThickness="3"/>
-                            <sync:SfTimePicker Value="{Binding EndTime}" Margin="3,2" ValueChanged="End_TimeSpanEdit_OnValueChanged" FormatString="HH:mm"/>
-                        </StackPanel>
-                    </Border>
+                    <Button MouseDoubleClick="Control_OnMouseDoubleClick">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <ContentPresenter Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <StackPanel Margin="5" Orientation="Horizontal">
+                                <sync:SfTimePicker Value="{Binding StartTime}" Margin="2" ValueChanged="Start_TimeSpanEdit_OnValueChanged" FormatString="HH:mm"/>
+                                <Line X1="2" Y1="18" X2="19" Y2="18" Stroke="Black" StrokeThickness="3"/>
+                                <sync:SfTimePicker Value="{Binding EndTime}" Margin="3,2" ValueChanged="End_TimeSpanEdit_OnValueChanged" FormatString="HH:mm"/>
+                            </StackPanel>
+                        </Border>
+                    </Button>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

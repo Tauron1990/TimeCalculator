@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
 
 namespace TimeCalculator
 {
@@ -8,12 +9,15 @@ namespace TimeCalculator
     /// </summary>
     public partial class RunTimeCalculator
     {
-        public RunTimeCalculator()
+        public RunTimeCalculator(bool addSetup)
         {
             InitializeComponent();
+
+            if(addSetup)
+                ((RunTimeCalculatorViewModel)DataContext).AddItemSpecial();
         }
 
-        public RuntimeCalculatorResult EffectiveTime => ((RunTimeCalculatorViewModel) DataContext).EffectiveTime;
+        public RuntimeCalculatorResult EffectiveTime => Dispatcher.Invoke(() => (RunTimeCalculatorViewModel) DataContext).EffectiveTime;
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
@@ -41,6 +45,11 @@ namespace TimeCalculator
             DateTime temp = (DateTime) e.NewValue;
 
             item.EndTime = new TimeSpan(temp.Hour, temp.Minute, 0);
+        }
+
+        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ((RunTimeCalculatorViewModel)DataContext).AddItemSpecial();
         }
     }
 }

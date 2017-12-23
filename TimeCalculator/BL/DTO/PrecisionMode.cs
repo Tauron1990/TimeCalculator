@@ -6,6 +6,7 @@
         NearCorner,
         AmountMismatchPerfect,
         AmountMismatchNearCorner,
-        NoData
+        NoData,
+        InValid
     }
 }
