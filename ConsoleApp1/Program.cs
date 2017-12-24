@@ -16,7 +16,9 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            long test = new TimeSpan(5 * 365, 0,0,0).Ticks;
+            Regex ex = new Regex(@"");
+
+            var test = ex.Match("Tauron");
         }
     }
 }

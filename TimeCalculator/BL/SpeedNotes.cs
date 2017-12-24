@@ -63,11 +63,9 @@ namespace TimeCalculator.BL
         {
             if (_nodes.Count < 2) return 0;
 
-            if (_nodes.Count % 2 != 0) return 0;
-
             try
             {
-                return Math.Round(Interpolate.Common(_nodes.Select(n => (double) n.Drops), _nodes.Select(n => n.Speed)).Interpolate(drops), 3);
+                return Math.Round(Interpolate.Linear(_nodes.Select(n => (double) n.Drops), _nodes.Select(n => n.Speed)).Interpolate(drops), 3);
             }
             catch (ArgumentException)
             {

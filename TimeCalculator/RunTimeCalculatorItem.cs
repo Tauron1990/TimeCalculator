@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using DevExpress.Mvvm;
 
 namespace TimeCalculator
 {
-    public class RunTimeCalculatorItem : BindableBase
+    [Serializable]
+    public class RunTimeCalculatorItem : BindableBase, ISerializable
     {
-        public TimeSpan StartTime
+        public DateTime StartTime
         {
             get => GetProperty(() => StartTime);
             set => SetProperty(() => StartTime, value);
         }
 
-        public TimeSpan EndTime
+        public DateTime EndTime
         {
             get => GetProperty(() => EndTime);
             set => SetProperty(() => EndTime, value);
         }
 
-        public RunTimeCalculatorItemType ItemType { get; set; }
+        public RunTimeCalculatorItemType ItemType { get; }
 
-        public RunTimeCalculatorItem(RunTimeCalculatorItemType itemType, TimeSpan startTime)
+        public RunTimeCalculatorItem(RunTimeCalculatorItemType itemType, DateTime startTime)
         {
             StartTime = startTime;
-            itemType = ItemType;
+            ItemType = itemType;
 
-            switch (itemType)
+            switch (ItemType)
             {
                 case RunTimeCalculatorItemType.Iteration:
                     EndTime = startTime + TimeSpan.FromMinutes(Properties.Settings.Default.IterationTime);
@@ -38,11 +40,28 @@ namespace TimeCalculator
             }
         }
 
+        protected RunTimeCalculatorItem(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+                throw new ArgumentNullException(nameof(info));
+
+            StartTime = (DateTime) info.GetValue(nameof(StartTime), typeof(DateTime));
+            EndTime = (DateTime) info.GetValue(nameof(EndTime), typeof(DateTime));
+            ItemType = (RunTimeCalculatorItemType) info.GetValue(nameof(ItemType), typeof(RunTimeCalculatorItemType));
+        }
+
         public TimeSpan? CalculateDiffernce()
         {
             if (EndTime < StartTime) return null;
 
             return EndTime - StartTime;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(StartTime), StartTime);
+            info.AddValue(nameof(EndTime), EndTime);
+            info.AddValue(nameof(ItemType), ItemType);
         }
     }
 }

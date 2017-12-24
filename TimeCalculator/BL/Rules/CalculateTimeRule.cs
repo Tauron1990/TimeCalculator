@@ -71,12 +71,11 @@ namespace TimeCalculator.BL.Rules
 
                 foreach (var key in potential)
                 {
-                    if (key.AlmostEqual(clusterSpeed, Properties.Settings.Default.PefectDifference))
-                    {
-                        sortDic[speed].Add(clusterEntry);
-                        added = true;
-                        break;
-                    }
+                    if (!key.AlmostEqual(clusterSpeed, Properties.Settings.Default.PefectDifference)) continue;
+
+                    sortDic[speed].Add(clusterEntry);
+                    added = true;
+                    break;
                 }
 
                 if(added) continue;
@@ -101,7 +100,7 @@ namespace TimeCalculator.BL.Rules
                 values.Add(speedEntry.Value.Average(ce => ce.NormaizedTime.TotalMinutes));
             }
 
-            return TimeSpan.FromMinutes(Interpolate.Common(points, values).Interpolate(speed) * (amount / 1000d));
+            return TimeSpan.FromMinutes(Interpolate.Linear(points, values).Interpolate(speed) * (amount / 1000d));
         }
 
         private Dictionary<PrecisionMode, List<JobEntity>> AggregateEntitys(CalculateTimeInput input)
@@ -129,7 +128,7 @@ namespace TimeCalculator.BL.Rules
             long amount = input.Amount.Value;
 
 
-            using (var database = new JobDatabase())
+            using (var database = DataBaseFactory.CreateDatabase())
             {
                 foreach (var entry in database.JobEntities.AsQueryable()
                     .Where(e => e.Length == lenght)

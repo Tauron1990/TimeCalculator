@@ -94,5 +94,17 @@ namespace TimeCalculator.Properties {
                 this["AmoutMismatch"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Common")]
+        public string CurrentUser {
+            get {
+                return ((string)(this["CurrentUser"]));
+            }
+            set {
+                this["CurrentUser"] = value;
+            }
+        }
     }
 }

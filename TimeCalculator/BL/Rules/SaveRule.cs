@@ -10,7 +10,7 @@ namespace TimeCalculator.BL.Rules
 
             if(normalizedResult.NormalizedTime == null) return new SaveOutput(false, normalizedResult.FormatedResult);
 
-            using (var database = new JobDatabase())
+            using (var database = DataBaseFactory.CreateDatabase())
             {
                 database.JobEntities.Add(new JobEntity
                 {
@@ -24,7 +24,7 @@ namespace TimeCalculator.BL.Rules
                     NormaizedTime = normalizedResult.NormalizedTime.Value,
                     Speed = input.Speed.Value,
                     StartTime = input.StartTime,
-                    Width = input.PaperFormat.Width.Value
+                    Width = input.PaperFormat.Width.Value,
                     // ReSharper restore PossibleInvalidOperationException
                 });
 

@@ -8,7 +8,7 @@ namespace TimeCalculator.BL.Rules
     {
         public object Action(AddSetupInput input)
         {
-            using (var database = new JobDatabase())
+            using (var database = DataBaseFactory.CreateDatabase())
             {
                 foreach (var item in input.Items.Where(i => i != null))
                     AddSetupEntity(database, item);
@@ -36,7 +36,7 @@ namespace TimeCalculator.BL.Rules
             var time = item.CalculateDiffernce();
             if(time == null) return;
 
-            database.SetupEntities.Add(new SetupEntity {SetupType = type, Value = (int) time.Value.TotalMinutes});
+            database.SetupEntities.Add(new SetupEntity {SetupType = type, Value = (int) time.Value.TotalMinutes, StartTime = item.StartTime});
         }
     }
 }

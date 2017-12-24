@@ -20,5 +20,8 @@
     <Setting Name="AmoutMismatch" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2000</Value>
     </Setting>
+    <Setting Name="CurrentUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Common</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

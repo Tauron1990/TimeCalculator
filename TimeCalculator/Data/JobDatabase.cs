@@ -13,12 +13,13 @@ namespace TimeCalculator.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string pathFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron", "TimeCalculator");
+            string fileName = DataBaseFactory.DatabasePath;
+            string pathFolder = Path.GetDirectoryName(fileName);
             if (!Directory.Exists(pathFolder))
-                Directory.CreateDirectory(pathFolder);
+                Directory.CreateDirectory(pathFolder ?? throw new InvalidOperationException());
 
 
-            optionsBuilder.UseSqlite(new SqliteConnectionStringBuilder {DataSource = Path.Combine(pathFolder, "data.db")}.ToString());
+            optionsBuilder.UseSqlite(new SqliteConnectionStringBuilder {DataSource = fileName}.ToString());
             base.OnConfiguring(optionsBuilder);
         }
     }

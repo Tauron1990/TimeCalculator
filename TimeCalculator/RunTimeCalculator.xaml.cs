@@ -9,12 +9,15 @@ namespace TimeCalculator
     /// </summary>
     public partial class RunTimeCalculator
     {
-        public RunTimeCalculator(bool addSetup)
+        public RunTimeCalculator(bool addSetup, bool loadFormSessionManager)
         {
             InitializeComponent();
 
-            if(addSetup)
-                ((RunTimeCalculatorViewModel)DataContext).AddItemSpecial();
+
+            ((RunTimeCalculatorViewModel) DataContext).Initialize(loadFormSessionManager);
+
+            if (addSetup)
+                ((RunTimeCalculatorViewModel) DataContext).AddItemSpecial();
         }
 
         public RuntimeCalculatorResult EffectiveTime => Dispatcher.Invoke(() => (RunTimeCalculatorViewModel) DataContext).EffectiveTime;
@@ -32,24 +35,21 @@ namespace TimeCalculator
         private void Start_TimeSpanEdit_OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             RunTimeCalculatorItem item = (RunTimeCalculatorItem) d.GetValue(DataContextProperty);
-
-            DateTime temp = (DateTime) e.NewValue;
-
-            item.StartTime = new TimeSpan(temp.Hour, temp.Minute, 0);
+            
+            item.StartTime = (DateTime) e.NewValue;
         }
 
         private void End_TimeSpanEdit_OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             RunTimeCalculatorItem item = (RunTimeCalculatorItem) d.GetValue(DataContextProperty);
-
-            DateTime temp = (DateTime) e.NewValue;
-
-            item.EndTime = new TimeSpan(temp.Hour, temp.Minute, 0);
+            
+            item.EndTime = (DateTime) e.NewValue;
         }
 
-        private void Control_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ((RunTimeCalculatorViewModel)DataContext).AddItemSpecial();
+            if(e.ClickCount == 2)
+                ((RunTimeCalculatorViewModel)DataContext).AddItemSpecial();
         }
     }
 }

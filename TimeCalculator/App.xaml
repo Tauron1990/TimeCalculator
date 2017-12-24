@@ -7,6 +7,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="DataDics/SfInput.xaml"/>
+                <ResourceDictionary Source="DataDics/SfChart.xaml"/>
                 <ResourceDictionary Source="DataDics/TimeSpanEdit.xaml"/>
                 <ResourceDictionary Source="DataDics/TabControlExt.xaml"/>
                 <ResourceDictionary Source="DataDics/DropDownButtonAdv.xaml"/>

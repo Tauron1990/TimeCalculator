@@ -8,7 +8,7 @@ namespace TimeCalculator.BL.Rules
     {
         public object Action(object input)
         {
-            using (var database = new JobDatabase())
+            using (var database = DataBaseFactory.CreateDatabase())
             {
                 foreach (var group in database.SetupEntities.AsNoTracking().GroupBy(e => e.SetupType))
                 {

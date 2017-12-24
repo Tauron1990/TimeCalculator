@@ -32,20 +32,13 @@
         <ListBox SelectedItem="{Binding Current}" SelectionMode="Single" ItemsSource="{Binding CalculatorItems}">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="local:RunTimeCalculatorItem">
-                    <Button MouseDoubleClick="Control_OnMouseDoubleClick">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <ContentPresenter Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"/>
-                            </ControlTemplate>
-                        </Button.Template>
                         <Border BorderBrush="Black" BorderThickness="1">
                             <StackPanel Margin="5" Orientation="Horizontal">
                                 <sync:SfTimePicker Value="{Binding StartTime}" Margin="2" ValueChanged="Start_TimeSpanEdit_OnValueChanged" FormatString="HH:mm"/>
-                                <Line X1="2" Y1="18" X2="19" Y2="18" Stroke="Black" StrokeThickness="3"/>
+                                <Line X1="2" Y1="18" X2="19" Y2="18" Stroke="Black" StrokeThickness="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown"/>
                                 <sync:SfTimePicker Value="{Binding EndTime}" Margin="3,2" ValueChanged="End_TimeSpanEdit_OnValueChanged" FormatString="HH:mm"/>
                             </StackPanel>
                         </Border>
-                    </Button>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

@@ -5,10 +5,10 @@ namespace TimeCalculator.Data
 {
     public static class FilesHelper
     {
-        private static string _basePath =
+        public static readonly string BasePath =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tauron\\TimeCalculator");
 
-        public static string SeassionFilePath = Path.Combine(_basePath, "Seassion.db");
+        public static readonly string SeassionFilePath = Path.Combine(BasePath, "Seassion.db");
 
     }
 }

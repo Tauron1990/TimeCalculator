@@ -1,18 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Syncfusion.Windows.Tools.Controls;
 
 namespace TimeCalculator
@@ -25,21 +13,33 @@ namespace TimeCalculator
         public MainWindow()
         {
             InitializeComponent();
+
+            ((MainWindowViewModel) DataContext).IsOperationRunning = false;
         }
 
-        private void TabControlExt_OnOnCloseButtonClick(object sender, CloseTabEventArgs e)
-        {
-            e.Cancel = true;
-        }
+        private void TabControlExt_OnOnCloseButtonClick(object sender, CloseTabEventArgs e) => e.Cancel = true;
 
         private void TimeSpanEdit_OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) => ((MainWindowViewModel) DataContext).RunTime = (TimeSpan) e.NewValue;
 
         private void BindableBase_OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var model = (MainWindowViewModel) sender;
+            Dispatcher.Invoke(() =>
+                {
+                    var model = (MainWindowViewModel) sender;
 
-            if (e.PropertyName == nameof(model.RunTime))
-                RunTimeElement.Value = model.RunTime;
+                    if (e.PropertyName == nameof(model.RunTime))
+                        RunTimeElement.Value = model.RunTime;
+                });
+        }
+
+        private bool _shown;
+
+        private void MainWindow_OnContentRendered(object sender, EventArgs e)
+        {
+            if(_shown) return;
+
+            _shown = true;
+            ((MainWindowViewModel)DataContext).WindowLoaded();
         }
     }
 }

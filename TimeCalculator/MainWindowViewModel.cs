@@ -18,14 +18,17 @@ namespace TimeCalculator
 {
     public sealed class MainWindowViewModel : ViewModelBase
     {
+        private const string RuntimeCalculatorProperty = nameof(RuntimeCalculatorProperty);
+        private const string InProgressProperty = nameof(InProgressProperty);
+        
         #region Common
+
+        private bool _loadTimeCalculatorFromSession;
 
         public MainWindowViewModel()
         {
             PropertyChanged += OnPropertyChanged;
             _speedNotes = new SpeedNotes("Speed.Notes");
-            Reset();
-            SetResultCalculation();
         }
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -46,7 +49,7 @@ namespace TimeCalculator
                 case nameof(Speed):
                     SetReultOfInsert();
                     break;
-            }      
+            }
         }
 
         public int SelectedTabIndex
@@ -59,11 +62,38 @@ namespace TimeCalculator
         {
             base.OnInitializeInRuntime();
             InitializeSettings();
+
+            _loadTimeCalculatorFromSession = SessionManager.Get<bool>(RuntimeCalculatorProperty);
+
+            if (SessionManager.Get<bool>(InProgressProperty)) return;
+
+            Reset();
+            SetResultCalculation();
+        }
+
+        public void WindowLoaded()
+        {
+            if(!SessionManager.Get<bool>(InProgressProperty))
+                SelectedTabIndex = 1;
+
+            if(_loadTimeCalculatorFromSession)
+                CalculateTimeImpl(false, true);
         }
 
         protected override PropertyManager CreatePropertyManager()
         {
-            return SessionManager.CreateManager(nameof(MainWindowViewModel));
+            var temp = SessionManager.CreateManager(nameof(MainWindowViewModel));
+
+            string format = temp.GetProperty<string>(nameof(PaperFormat));
+            string calcFormat = temp.GetProperty<string>(nameof(CalcPaperFormat));
+
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
+                PaperFormat = format;
+                CalcPaperFormat = calcFormat;
+            }), DispatcherPriority.ApplicationIdle);
+
+            return temp;
         }
 
         #endregion
@@ -96,7 +126,7 @@ namespace TimeCalculator
         #endregion
 
         #region Insert
-
+        
         [Command, UsedImplicitly]
         public void Reset()
         {
@@ -114,6 +144,9 @@ namespace TimeCalculator
             SetReultOfInsert();
 
             SelectedTabIndex = 1;
+
+            SessionManager.Set(RuntimeCalculatorProperty, false);
+            SessionManager.Set(InProgressProperty, false);
         }
 
         public double? Speed
@@ -183,14 +216,14 @@ namespace TimeCalculator
         private void SetReultOfInsert()
         {
             if (_saveOperationCompled) Application.Current.Dispatcher.BeginInvoke(new Action(Reset), DispatcherPriority.Background);
-
+            
             var cresult = BusinessRules.InsertValidation.Action(new ValidationInput(Amount, Iterations, RunTime, new PaperFormat(PaperFormat), Speed));
 
             Result = cresult.FormatedResult;
 
             _insertOk = cresult.NormalizedTime != null;
 
-            CommandManager.InvalidateRequerySuggested();
+            Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
         }
 
         private bool _insertOk;
@@ -255,24 +288,34 @@ namespace TimeCalculator
             CalculateTimeImpl(false);
         }
 
-        private void CalculateTimeImpl(bool addSetup)
+        private void CalculateTimeImpl(bool addSetup, bool loadFormSessionManager = false)
         {
-            var view = new RunTimeCalculator(addSetup) {Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
+            SessionManager.Set(RuntimeCalculatorProperty, true);
 
-            if (view.ShowDialog() != true) return;
-
-
-            RunOperation("Laufzeit Berechnung", () =>
+            try
             {
-                var eff = view.EffectiveTime;
+                var view = new RunTimeCalculator(addSetup, loadFormSessionManager) {Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner};
 
-                BusinessRules.AddSetupItems.Action(new AddSetupInput(eff.Iterations.Concat(new[] {eff.Setup})));
-                BusinessRules.RecalculateSetup.Action(null);
+                if (view.ShowDialog() != true) return;
 
-                if (eff.Runtime == null) return;
 
-                RunTime = eff.Runtime.Value;
-            });
+                RunOperation("Laufzeit Berechnung", () =>
+                {
+                    var eff = view.EffectiveTime;
+
+                    BusinessRules.AddSetupItems.Action(new AddSetupInput(eff.Iterations.Concat(new[] {eff.Setup})));
+                    BusinessRules.RecalculateSetup.Action(null);
+
+                    if (eff.Runtime == null) return;
+
+                    RunTime = eff.Runtime.Value;
+                    Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
+                });
+            }
+            finally
+            {
+                SessionManager.Set(RuntimeCalculatorProperty, false);
+            }
         }
 
         #endregion
@@ -356,7 +399,7 @@ namespace TimeCalculator
             _canCalculate = result.Valid;
             _calculationSuccessFull = false;
 
-            CommandManager.InvalidateRequerySuggested();
+            Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
         }
 
         [Command, UsedImplicitly]
@@ -364,6 +407,7 @@ namespace TimeCalculator
         {
             RunOperation("Zeit Wird Berechnet", () =>
             {
+                SessionManager.Set(InProgressProperty, true);
                 _calcTime = DateTime.Now;
 
                 var output = BusinessRules.CalculateTime.Action(new CalculateTimeInput(CalcIterations, new PaperFormat(CalcPaperFormat), CalcAmount, CalcSpeed));
@@ -386,7 +430,7 @@ namespace TimeCalculator
                     _calculationSuccessFull = true;
                 }
 
-                CommandManager.InvalidateRequerySuggested();
+                Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
             });
         }
 
@@ -483,6 +527,16 @@ namespace TimeCalculator
         {
             get => TimeSpan.FromTicks(_settings.EntityExpire);
             set { _settings.EntityExpire = value.Ticks; _settings.Save(); }
+        }
+
+        public string UserName
+        {
+            get => _settings.CurrentUser;
+            set
+            {
+                if(string.IsNullOrWhiteSpace(value)) return;
+                _settings.CurrentUser = value; _settings.Save();
+            }
         }
 
         private void InitializeSettings()

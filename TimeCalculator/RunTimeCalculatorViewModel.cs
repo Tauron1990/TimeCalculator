@@ -1,25 +1,36 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using DevExpress.Mvvm;
 using DevExpress.Mvvm.DataAnnotations;
 using JetBrains.Annotations;
+using TimeCalculator.Data;
 
 namespace TimeCalculator
 {
     public sealed class RunTimeCalculatorViewModel : ViewModelBase
     {
-        public ObservableCollection<RunTimeCalculatorItem> CalculatorItems { get; }
+        private const string RunTimeCalculatorProperty = nameof(RunTimeCalculatorProperty);
+
+        public class ListExposingObservableCollection : ObservableCollection<RunTimeCalculatorItem>
+        {
+            public IList<RunTimeCalculatorItem> ToSerialize => Items;
+        }
+
+        public ListExposingObservableCollection CalculatorItems { get; }
 
         public RunTimeCalculatorViewModel()
         {
-            CalculatorItems = new ObservableCollection<RunTimeCalculatorItem>();
+            CalculatorItems = new ListExposingObservableCollection();
             AddItemCommand = new DelegateCommand<RunTimeCalculatorItemType>(AddItem);
         }
 
         protected override void OnInitializeInDesignMode()
         {
-            CalculatorItems.Add(new RunTimeCalculatorItem(RunTimeCalculatorItemType.Running, new TimeSpan(0,7,0,0)) { EndTime = new TimeSpan(0,16,0,0)});
+            var curr = DateTime.Now;
+
+            CalculatorItems.Add(new RunTimeCalculatorItem(RunTimeCalculatorItemType.Running, curr) { EndTime = curr + TimeSpan.FromHours(2)});
             base.OnInitializeInDesignMode();
         }
 
@@ -72,7 +83,9 @@ namespace TimeCalculator
 
             var dateTime = DateTime.Now;
 
-            CalculatorItems.Add(new RunTimeCalculatorItem(parameter, new TimeSpan(dateTime.Hour, dateTime.Minute, 0)));
+            CalculatorItems.Add(new RunTimeCalculatorItem(parameter, dateTime));
+
+            SessionManager.PropertyChange();
         }
 
         [UsedImplicitly]
@@ -86,7 +99,7 @@ namespace TimeCalculator
 
             var dateTime = DateTime.Now;
             var last = CalculatorItems.Last();
-            last.EndTime = new TimeSpan(dateTime.Hour, dateTime.Minute, 0);
+            last.EndTime = dateTime;
 
             switch (last.ItemType)
             {
@@ -100,6 +113,8 @@ namespace TimeCalculator
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            SessionManager.PropertyChange();
         }
 
         [Command, UsedImplicitly]
@@ -107,5 +122,14 @@ namespace TimeCalculator
 
         [UsedImplicitly]
         public bool CanRemove() => Current != null;
+
+        public void Initialize(bool loadMode)
+        {      
+            if(loadMode)
+                foreach (var item in SessionManager.Get<IList<RunTimeCalculatorItem>>(RunTimeCalculatorProperty))
+                    CalculatorItems.Add(item);
+
+            SessionManager.Set(RunTimeCalculatorProperty, CalculatorItems.ToSerialize);
+        }
     }
 }
