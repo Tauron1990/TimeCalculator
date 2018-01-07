@@ -27,5 +27,9 @@ namespace TimeCalculator.Data
         public TimeSpan NormaizedTime { get; set; }
 
         public TimeSpan EffectiveTime { get; set; }
+
+        public int? SetupTime { get; set; }
+
+        public int? IterationTime { get; set; }
     }
 }

@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="TimeCalculator.Charts.Builder.Controls.AvarageSetupTimePerQuaterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimeCalculator.Charts.Builder.Controls"
+             xmlns:conv="clr-namespace:TimeCalculator.Converter"
+             xmlns:chart="http://schemas.syncfusion.com/wpf"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="700" DataContext="{x:Static local:TestData.AvarageSetupTimePerQuater}">
+    <UserControl.Resources>
+        <conv:DoubleMillisecoundToStringConverter x:Key="DoubleTimeConverter"/>
+        <DataTemplate x:Key="TimeLabelTemplate">
+            <TextBlock Text="{Binding Converter={StaticResource DoubleTimeConverter}}"/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <chart:SfChart Margin="20" AreaBorderThickness="3">
+        <chart:SfChart.Header>
+            <TextBlock Text="Rüstzeiten Pro Quatal" FontFamily="Cambria Math" FontStyle="Normal" FontWeight="Medium" FontSize="30" Margin="5"/>
+        </chart:SfChart.Header>
+        <chart:SfChart.Legend>
+            <chart:ChartLegend DockPosition="Bottom" FontSize="18"/>
+        </chart:SfChart.Legend>
+        <chart:SfChart.PrimaryAxis>
+            <chart:CategoryAxis Header="Jahre" LabelFormat="yyyy"/>
+        </chart:SfChart.PrimaryAxis>
+        <chart:SfChart.SecondaryAxis>
+            <chart:TimeSpanAxis LabelFormat="hh\:mm"/>
+        </chart:SfChart.SecondaryAxis>
+        <chart:StackingColumnSeries EnableAnimation="True" LegendIcon="Circle" ItemsSource="{Binding Items}" XBindingPath="Year" YBindingPath="Quater1" Label="1 Quartal"
+                                    GroupingLabel="Group1">
+            <chart:StackingColumnSeries.AdornmentsInfo>
+                <chart:ChartAdornmentInfo AdornmentsPosition="TopAndBottom" LabelTemplate="{StaticResource TimeLabelTemplate}"
+                                              ShowLabel="True" HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" />
+            </chart:StackingColumnSeries.AdornmentsInfo>
+        </chart:StackingColumnSeries>
+        <chart:StackingColumnSeries EnableAnimation="True" LegendIcon="Circle" ItemsSource="{Binding Items}" XBindingPath="Year" YBindingPath="Quater2" Label="2 Quartal"
+                                    GroupingLabel="Group2">
+            <chart:StackingColumnSeries.AdornmentsInfo>
+                <chart:ChartAdornmentInfo AdornmentsPosition="TopAndBottom" LabelTemplate="{StaticResource TimeLabelTemplate}"
+                                              ShowLabel="True" HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" />
+            </chart:StackingColumnSeries.AdornmentsInfo>
+        </chart:StackingColumnSeries>
+        <chart:StackingColumnSeries EnableAnimation="True" LegendIcon="Circle" ItemsSource="{Binding Items}" XBindingPath="Year" YBindingPath="Quater3" Label="3 Quartal"
+                                    GroupingLabel="Group3">
+            <chart:StackingColumnSeries.AdornmentsInfo>
+                <chart:ChartAdornmentInfo AdornmentsPosition="TopAndBottom"  LabelTemplate="{StaticResource TimeLabelTemplate}"
+                                              ShowLabel="True" HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" />
+            </chart:StackingColumnSeries.AdornmentsInfo>
+        </chart:StackingColumnSeries>
+        <chart:StackingColumnSeries EnableAnimation="True" LegendIcon="Circle" ItemsSource="{Binding Items}" XBindingPath="Year" YBindingPath="Quater4" Label="4 Quartal">
+            <chart:StackingColumnSeries.AdornmentsInfo>
+                <chart:ChartAdornmentInfo AdornmentsPosition="TopAndBottom"  LabelTemplate="{StaticResource TimeLabelTemplate}"
+                                              ShowLabel="True" HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center" />
+            </chart:StackingColumnSeries.AdornmentsInfo>
+        </chart:StackingColumnSeries>
+    </chart:SfChart>
+</UserControl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

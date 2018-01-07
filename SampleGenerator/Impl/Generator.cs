@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using MathNet.Numerics;
 using MathNet.Numerics.Random;
 using TimeCalculator.BL;
 using TimeCalculator.Data;
@@ -48,15 +47,18 @@ namespace SampleGenerator.Impl
         public void Generate()
         {
             DataBaseFactory.UserNameOverride = Data.DatabaseName;
-            if(File.Exists(DataBaseFactory.DatabasePath))
+            if (File.Exists(DataBaseFactory.DatabasePath))
                 File.Delete(DataBaseFactory.DatabasePath);
 
             PaperFormat[] formats =
             {
-                new PaperFormat(50, 70), new PaperFormat(32, 46)
+                new PaperFormat(50, 100),
+                new PaperFormat(50, 70),
+                new PaperFormat(30, 45),
+                new PaperFormat(20, 30),
             };
 
-            RandomSource random = new WH2006(Environment.TickCount, false);
+            RandomSource random = new WH2006(false);
             DoubleRundom iterations = new DoubleRundom(random, 1, 10);
             DoubleRundom speed = new DoubleRundom(random, 0, 10);
             SpeedNotes speedNotes = new SpeedNotes("Speed.Notes");
@@ -70,65 +72,71 @@ namespace SampleGenerator.Impl
                 1.5,
                 2.0
             };
-            int perQuater = Data.ToGenerate / 4;
-            int currentQuater = 0;
-            int quaterCounter = perQuater;
 
-            int swift = 0;
-            int compledAmount = Data.ToGenerate * formats.Length;
+            int compledAmount = Data.ToGenerate * 4;
             int currentAmount = 0;
             int error = 0;
 
-            foreach (var paperFormat in formats)
+
+            DateTime datetime = DateTime.Now;
+
+            for (int i = 0; i < compledAmount; i++)
             {
-                DateTime datetime = DateTime.Now;
-                if (swift > 0)
-                    datetime += TimeSpan.FromDays(1);
-                swift++;
-
-                for (int i = 0; i < Data.ToGenerate; i++)
+                if (datetime.Hour > 16)
                 {
-                    currentAmount++;
-                    quaterCounter--;
-                    if (quaterCounter == 0)
-                    {
-                        currentQuater++;
-                        if (currentQuater == 4)
-                            currentQuater = 0;
-                        quaterCounter = perQuater;
-                    }
+                    int toZero = 24 - datetime.Hour;
 
-                    var realIterations = iterations.Next();
-                    var realamount = random.Next(100, 10000);
-                    var realSpeed = speedNotes.CalculateSpeed(speed.Next() >= 5 ? 15 : 4);
-                    var realtime = CalculateTime(realamount, realSpeed, realIterations, quarterMultipler[currentQuater], out var realProblem, out var realBigProblem);
-
-                    SaveInput input = new SaveInput(realamount, realIterations, realProblem, realBigProblem, paperFormat, realSpeed, datetime, realtime);
-
-                    var result = BusinessRules.Save.Action(input);
-                    if (!result.Succsess)
-                        error++;
-
-                    ProgressAction(new Progress { Amount = compledAmount, Generated = currentAmount, Errors = error});
-
-                    datetime += TimeSpan.FromDays(2);
+                    datetime += TimeSpan.FromHours(toZero + 7);
                 }
+
+                int currentQuater;
+                if (datetime.Month <= 3)
+                    currentQuater = 0;
+                else if (datetime.Month <= 6)
+                    currentQuater = 1;
+                else if (datetime.Month <= 9)
+                    currentQuater = 2;
+                else
+                    currentQuater = 3;
+
+                var realIterations = iterations.Next();
+                var realamount = random.Next(100, 10000);
+                var realSpeed = speedNotes.CalculateSpeed(speed.Next() >= 5 ? 15 : 4);
+                var realformat = formats[random.Next(0, 3)];
+                var realtime = CalculateTime(realamount, realSpeed, realIterations, quarterMultipler[currentQuater], realformat, out var realProblem, out var realBigProblem,
+                                              out var iterationMinutes, out var setupMinutes);
+
+                SaveInput input = new SaveInput(realamount, realIterations, realProblem, realBigProblem, realformat, realSpeed, datetime, realtime, iterationMinutes, setupMinutes);
+
+                datetime += realtime;
+
+                var result = BusinessRules.Save.Action(input);
+                if (!result.Succsess)
+                    error++;
+
+                ProgressAction(new Progress {Amount = compledAmount, Generated = currentAmount, Errors = error});
+
+                currentAmount++;
             }
         }
 
-        private TimeSpan CalculateTime(int amount, double speed, int iterations, double quaterMultipler, out bool problem, out bool bigProblem)
+
+        private TimeSpan CalculateTime(int amount, double speed, int iterations, double quaterMultipler, PaperFormat realformat, out bool problem, out bool bigProblem, 
+                                        out int iterationMinutes, out int setupMinutes)
         {
             problem = false;
             bigProblem = false;
 
-            double[] point = {0.06, 0.7};
-            double[] value = {3.22, 42};
-
-            double perhoure = Interpolate.Linear(point, value).Interpolate(speed);
-
-            double runtime = amount / perhoure * iterations;
+            // ReSharper disable once PossibleInvalidOperationException
+            double mperunit = (realformat.Lenght.Value + 10)  / 100d;
+            double compledMeters = amount * iterations * mperunit;
+            
+            double runtime = compledMeters / speed / 60;
             double iteration = _iterationTime.Next() * iterations;
             double setup = _setupTime.Next();
+
+            iterationMinutes = (int) iteration;
+            setupMinutes = (int) setup;
 
             if (setup > 50)
                 problem = true;

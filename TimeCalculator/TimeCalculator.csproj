@@ -192,6 +192,18 @@
     <Compile Include="BL\Rules\ValidationRuleBase.cs" />
     <Compile Include="BL\Rules\CalculateTimeRule.cs" />
     <Compile Include="BL\SpeedNotes.cs" />
+    <Compile Include="Charts\Aggregator.cs" />
+    <Compile Include="Charts\Builder\Controls\AvarageSetupTimePerQuaterControl.xaml.cs">
+      <DependentUpon>AvarageSetupTimePerQuaterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\Builder\Controls\TestData.cs" />
+    <Compile Include="Charts\ChartsWindowTool.xaml.cs">
+      <DependentUpon>ChartsWindowTool.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Charts\Builder\AvarageSetupTimePerQuaterBuilder.cs" />
+    <Compile Include="Charts\Builder\ChartDatabase.cs" />
+    <Compile Include="Charts\DTO\AvarageSetupTimePerQuater.cs" />
+    <Compile Include="Converter\DoubleMillisecoundToStringConverter.cs" />
     <Compile Include="Data\DataBaseFactory.cs" />
     <Compile Include="Data\FilesHelper.cs" />
     <Compile Include="Data\SessionManager.cs" />
@@ -205,6 +217,10 @@
     <Compile Include="Migrations\20171224082417_V2.designer.cs">
       <DependentUpon>20171224082417_V2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20171225053310_V3.cs" />
+    <Compile Include="Migrations\20171225053310_V3.designer.cs">
+      <DependentUpon>20171225053310_V3.cs</DependentUpon>
+    </Compile>
     <Compile Include="RunTimeCalculator.xaml.cs">
       <DependentUpon>RunTimeCalculator.xaml</DependentUpon>
     </Compile>
@@ -212,6 +228,19 @@
     <Compile Include="RunTimeCalculatorItemType.cs" />
     <Compile Include="RuntimeCalculatorResult.cs" />
     <Compile Include="RunTimeCalculatorViewModel.cs" />
+    <Compile Include="SpeedNodeEditorItem.cs" />
+    <Compile Include="SpeedNodeEditorWindow.xaml.cs">
+      <DependentUpon>SpeedNodeEditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SpeedNoteEditonWindowViewModel.cs" />
+    <Page Include="Charts\Builder\Controls\AvarageSetupTimePerQuaterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Charts\ChartsWindowTool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DataDics\BusyIndicator.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -272,6 +301,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SpeedNodeEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindowViewModel.cs" />
@@ -312,6 +345,7 @@
   <ItemGroup>
     <Resource Include="if_time machine_49027.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

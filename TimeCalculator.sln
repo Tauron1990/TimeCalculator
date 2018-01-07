@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompressionHelper", "Compre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleGenerator", "SampleGenerator\SampleGenerator.csproj", "{A986E8FF-B691-4A25-A21B-18A362D17822}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAppWPF", "TestAppWPF\TestAppWPF.csproj", "{1D82A731-BB94-4572-9FC3-EE16D6717A5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Jetvarnish|Any CPU = Debug Jetvarnish|Any CPU
@@ -45,6 +47,12 @@ Global
 		{A986E8FF-B691-4A25-A21B-18A362D17822}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A986E8FF-B691-4A25-A21B-18A362D17822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A986E8FF-B691-4A25-A21B-18A362D17822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B}.Debug Jetvarnish|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B}.Debug Jetvarnish|Any CPU.Build.0 = Debug|Any CPU
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +61,7 @@ Global
 		{1A463708-C46E-4688-994F-024E2F67914C} = {BA9B4D29-F7FF-4627-A2AB-291B1EF53733}
 		{85D5AE08-4EB8-470E-B39A-B531CC9AF1DC} = {58BBDA5C-9AA8-4A6A-8771-33FBF78074E6}
 		{A986E8FF-B691-4A25-A21B-18A362D17822} = {58BBDA5C-9AA8-4A6A-8771-33FBF78074E6}
+		{1D82A731-BB94-4572-9FC3-EE16D6717A5B} = {BA9B4D29-F7FF-4627-A2AB-291B1EF53733}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {419B97D5-1D8E-4FCC-BDD3-A3E0CCD7303B}

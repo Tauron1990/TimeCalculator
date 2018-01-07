@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using JetBrains.Annotations;
 using MathNet.Numerics;
 
 namespace TimeCalculator.BL
 {
     public class SpeedNotes
     {
-        private class SpeedNode
+        [PublicAPI]
+        public const string DefaultFileName = "Speed.Notes";
+
+        public class SpeedNode
         {
             public double Speed { get; set; }
 
@@ -16,9 +20,19 @@ namespace TimeCalculator.BL
         }
 
         private readonly List<SpeedNode> _nodes;
+        private readonly string _filePath;
+
+        public List<SpeedNode> Nodes => _nodes;
+
+        public SpeedNotes()
+            :this(DefaultFileName)
+        {
+            
+        }
 
         public SpeedNotes(string filePath)
         {
+            _filePath = filePath;
             _nodes = new List<SpeedNode>();
 
             if(!File.Exists(filePath)) return;
@@ -71,6 +85,13 @@ namespace TimeCalculator.BL
             {
                 return 0;
             }
+        }
+
+        public void Save()
+        {
+            using (var stream = new StreamWriter(new FileStream(DefaultFileName, FileMode.Create)))
+                foreach (var node in Nodes)
+                    stream.WriteLine(node.Speed + "-" + node.Drops);
         }
     }
 }

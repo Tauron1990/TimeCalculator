@@ -175,6 +175,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Pro Durchlauf (min):" Margin="2" VerticalAlignment="Center"/>
@@ -192,9 +193,24 @@
                     <TextBlock Text="Nutzer:" Grid.Column="0" Grid.Row="6" Margin="2" VerticalAlignment="Center"/>
                     <sync:SfMaskedEdit Grid.Column="1" Grid.Row="6" Margin="2" MaskType="RegEx" Mask="(\D){3,10}" Value="{Binding UserName, Mode=TwoWay}" 
                                        ValidationMode="KeyPress" ValueMaskFormat="IncludePromptAndLiterals"/>
+                    <Button Grid.Column="1" Grid.Row="7" Margin="5" Command="{Binding SpeedNoteEditorCommand}">
+                        <TextBlock TextWrapping="Wrap" Text="Geschwindigkeiten Editor"/>
+                    </Button>
                 </Grid>
             </sync:TabItemExt>
-
+            <sync:TabItemExt Header="Charts">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Button Margin="5" Grid.Column="1" Grid.Row="1"  Content="Öffnen" Command="{Binding OpenChartsCommand}"/>
+                </Grid>
+            </sync:TabItemExt>
         </sync:TabControlExt>
     </sync:SfBusyIndicator>
 </sync:ChromelessWindow>

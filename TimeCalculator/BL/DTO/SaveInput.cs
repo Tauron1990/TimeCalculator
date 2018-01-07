@@ -13,8 +13,11 @@ namespace TimeCalculator.BL
         public double? Speed { get; }
         public DateTime StartTime { get; }
         public TimeSpan RunTime { get; }
+        public int? SetupTime { get; }
+        public int? IterationTime { get; }
 
-        public SaveInput(long? amount, long? iteratins, bool problem, bool bigProblem, PaperFormat paperFormat, double? speed, DateTime startTime, TimeSpan runTime)
+
+        public SaveInput(long? amount, long? iteratins, bool problem, bool bigProblem, PaperFormat paperFormat, double? speed, DateTime startTime, TimeSpan runTime, int? setupTime, int? iterationTime)
         {
             Amount = amount;
             Iteratins = iteratins;
@@ -24,6 +27,8 @@ namespace TimeCalculator.BL
             Speed = speed;
             StartTime = startTime;
             RunTime = runTime;
+            SetupTime = setupTime;
+            IterationTime = iterationTime;
         }
     }
 }

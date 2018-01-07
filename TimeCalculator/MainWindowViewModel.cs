@@ -11,6 +11,8 @@ using DevExpress.Mvvm.DataAnnotations;
 using DevExpress.Mvvm.Native;
 using JetBrains.Annotations;
 using TimeCalculator.BL;
+using TimeCalculator.Charts;
+using TimeCalculator.Charts.DTO;
 using TimeCalculator.Data;
 using TimeCalculator.Properties;
 
@@ -28,7 +30,7 @@ namespace TimeCalculator
         public MainWindowViewModel()
         {
             PropertyChanged += OnPropertyChanged;
-            _speedNotes = new SpeedNotes("Speed.Notes");
+            _speedNotes = new SpeedNotes();
         }
 
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
@@ -126,7 +128,10 @@ namespace TimeCalculator
         #endregion
 
         #region Insert
-        
+
+        private int? _setupTime;
+        private int? _iterationTime;
+
         [Command, UsedImplicitly]
         public void Reset()
         {
@@ -248,12 +253,15 @@ namespace TimeCalculator
             {
                 try
                 {
-                    var result = BusinessRules.Save.Action(new SaveInput(Amount, Iterations, Problems, BigProblems, new PaperFormat(PaperFormat), Speed, StartDateTime, RunTime));
+                    var result = BusinessRules.Save.Action(new SaveInput(Amount, Iterations, Problems, BigProblems, new PaperFormat(PaperFormat), Speed, 
+                                                                         StartDateTime, RunTime, _setupTime, _iterationTime));
 
                     if (result.Succsess)
                     {
                         Status = "Speichern Erfolgreich";
                         StatusOk = true;
+                        _iterationTime = null;
+                        _setupTime = null;
                     }
                     else
                     {
@@ -308,6 +316,9 @@ namespace TimeCalculator
 
                     if (eff.Runtime == null) return;
 
+                    _setupTime = eff.Setup.CalculateDiffernce()?.Minutes;
+                    _iterationTime = eff.Iterations.Sum(i => i.CalculateDiffernce()?.Minutes);
+
                     RunTime = eff.Runtime.Value;
                     Application.Current.Dispatcher.Invoke(CommandManager.InvalidateRequerySuggested);
                 });
@@ -322,7 +333,7 @@ namespace TimeCalculator
 
         #region Calculation
 
-        private readonly SpeedNotes _speedNotes;
+        private SpeedNotes _speedNotes;
         private bool _canCalculate;
         private TimeSpan? _fullRunTime;
         private bool _calculationSuccessFull;
@@ -487,6 +498,13 @@ namespace TimeCalculator
         [UsedImplicitly]
         public bool CanExchange() => _calculationSuccessFull;
 
+        [Command, UsedImplicitly]
+        public void SpeedNoteEditor()
+        {
+            if(new SpeedNodeEditorWindow { Owner = Application.Current.MainWindow, WindowStartupLocation = WindowStartupLocation.CenterOwner}.ShowDialog() == true)
+                _speedNotes = new SpeedNotes();
+        }
+
         #endregion
 
         #region Settings
@@ -554,6 +572,13 @@ namespace TimeCalculator
                 }
             };
         }
+
+        #endregion
+
+        #region Charts
+
+        [Command, UsedImplicitly]
+        public void OpenCharts() => RunOperation("Aggregiere Daten", Aggregator.Show<AvarageSetupTimePerQuater>);
 
         #endregion
     }

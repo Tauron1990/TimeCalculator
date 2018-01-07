@@ -26,6 +26,8 @@ namespace TimeCalculator.BL.Rules
                     StartTime = input.StartTime,
                     Width = input.PaperFormat.Width.Value,
                     // ReSharper restore PossibleInvalidOperationException
+                    IterationTime = input.IterationTime,
+                    SetupTime = input.SetupTime
                 });
 
                 database.SaveChanges();

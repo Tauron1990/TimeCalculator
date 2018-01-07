@@ -1,0 +1,25 @@
+﻿<sync:ChromelessWindow x:Class="TimeCalculator.SpeedNodeEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sync="http://schemas.syncfusion.com/wpf"
+        xmlns:local="clr-namespace:TimeCalculator"
+        mc:Ignorable="d"
+        Title="Geschwindigkeiten Editor" Height="300" Width="300" Icon="if_time machine_49027.ico">
+    <sync:ChromelessWindow.DataContext>
+        <local:SpeedNoteEditonWindowViewModel/>
+    </sync:ChromelessWindow.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button VerticalAlignment="Center" HorizontalAlignment="Center" Content="Hinzufügen" Margin="10"/>
+        <Button Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Entfernen" Margin="10"/>
+    </Grid>
+</sync:ChromelessWindow>
